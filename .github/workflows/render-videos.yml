@@ -3,9 +3,7 @@
 name: render-videos
 
 on:
-  schedule:
-    # Off the busy top of the hour (GitHub delays or drops scheduled runs at :00 under load).
-    - cron: "7,22,37,52 * * * *"
+  # Scheduled runs are off until formulak.news is live and social posting is set up (phase 5).
   workflow_dispatch:
 
 permissions:
