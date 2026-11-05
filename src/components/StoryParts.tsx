@@ -88,6 +88,10 @@ export async function SiteFooter() {
         <span className="handle-name" dir="ltr">@formulak.news</span>
         <small>هەموو هەواڵێک سەرچاوەکەی لەگەڵدایە و پێش بڵاوکردنەوە دەخوێنرێتەوە. <a href="/privacy">تایبەتمەندی</a> · <a href="/terms">مەرجەکان</a></small>
       </div>
+      <p className="disclaimer" style={{ fontSize: 12, opacity: 0.75, padding: "12px 18px 20px", margin: 0 }}>
+        فۆرمولا کەی ماڵپەڕێکی سەربەخۆیە و پەیوەندی بە کۆمپانیاکانی فۆرمولا ١ و FIA ەوە نییە.{" "}
+        <bdi className="lat">Formula K is an independent news site and is not associated with the Formula 1 companies or the FIA. F1 and FORMULA 1 are trademarks of Formula One Licensing B.V.</bdi>
+      </p>
     </footer>
   );
 }

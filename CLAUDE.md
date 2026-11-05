@@ -31,7 +31,7 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
 - Never use race footage, broadcast screenshots, onboard clips, team radio or F1 audio.
 - Results, positions, points and times are copied from the source, never worked out. Transfers are "reported" until confirmed.
 - `META_PAGE_ID` has no default: posting is refused until it is set to Formula K's Page.
-- Brand rule: no F1 logo, flying-F shape or circuit outlines; footer needs the independent-site disclaimer (to add).
+- Brand rule: no F1 logo, flying-F shape or circuit outlines; the footer carries the independent-site disclaimer.
 
 ## Temporary leftovers from Kurean
 

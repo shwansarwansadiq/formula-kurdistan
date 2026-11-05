@@ -60,7 +60,7 @@ export default async function TikTok({ searchParams }: { searchParams: Promise<{
           </a>
         ) : null}
       </div>
-      <p className="adm-note">دەنگێکی ترێند لە ناو تیکتۆکدا زیاد بکە؛ گۆرانیی کەی-پۆپ مەخەرە سەر ڤیدیۆکە خۆی.</p>
+      <p className="adm-note">دەنگێکی ترێند لە ناو تیکتۆکدا زیاد بکە؛ گۆرانی بە مافی چاپ مەخەرە سەر ڤیدیۆکە خۆی.</p>
       <ul className="tt-list">
         {stories.map((s) => (
           <li key={s.id} className={s.tiktok_done ? "tt done" : "tt"}>
