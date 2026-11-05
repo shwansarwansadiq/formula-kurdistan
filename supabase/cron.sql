@@ -1,0 +1,71 @@
+-- Formula K schedule, run by Supabase (works on Vercel's free plan, which only allows daily cron jobs).
+-- Before running: replace BOTH placeholders below.
+--   YOUR_SITE    → your Vercel address, e.g. formula-kurdistan.vercel.app (later formulak.news)
+--   YOUR_SECRET  → the same CRON_SECRET value you set in Vercel
+
+create extension if not exists pg_cron;
+create extension if not exists pg_net;
+
+-- Remove old versions of these jobs if you run this file again
+select cron.unschedule(jobname) from cron.job where jobname in ('formulak-collect', 'formulak-write');
+
+-- Collect headlines every 20 minutes
+select cron.schedule(
+  'formulak-collect',
+  '*/20 * * * *',
+  $$
+  select net.http_get(
+    url := 'https://YOUR_SITE/api/cron/collect',
+    headers := jsonb_build_object('Authorization', 'Bearer YOUR_SECRET'),
+    timeout_milliseconds := 60000
+  );
+  $$
+);
+
+-- Score and write stories at 10 minutes past every hour
+select cron.schedule(
+  'formulak-write',
+  '10 * * * *',
+  $$
+  select net.http_get(
+    url := 'https://YOUR_SITE/api/cron/write',
+    headers := jsonb_build_object('Authorization', 'Bearer YOUR_SECRET'),
+    timeout_milliseconds := 300000
+  );
+  $$
+);
+
+-- To check runs later:  select * from cron.job_run_details order by start_time desc limit 20;
+
+-- The Korea chart in the footer: Circle Chart publishes its weekly chart on Thursdays (Korea time).
+-- Checked once a day at 06:37 UTC; only a new week is stored. Added 30 Oct 2026 with migrate-006-chart.sql.
+
+-- Scheduled publishing: every 5 minutes, publish approved stories whose time has come. Added 30 Oct 2026 (migrate-010).
+select cron.unschedule(jobname) from cron.job where jobname = 'formulak-publish';
+select cron.schedule(
+  'formulak-publish',
+  '*/5 * * * *',
+  $$
+  select net.http_get(
+    url := 'https://YOUR_SITE/api/cron/publish',
+    headers := jsonb_build_object('Authorization', 'Bearer YOUR_SECRET'),
+    timeout_milliseconds := 300000
+  );
+  $$
+);
+
+-- Scenery: new Korea landscape/landmark candidates from Pexels every Monday 06:17 UTC (09:17 Hawler). Added 30 Oct 2026.
+
+-- Videos: every 15 minutes, start the GitHub video workflow if any video is waiting (GitHub's schedule is irregular).
+select cron.unschedule(jobname) from cron.job where jobname = 'formulak-videos';
+select cron.schedule(
+  'formulak-videos',
+  '3,18,33,48 * * * *',
+  $$
+  select net.http_get(
+    url := 'https://YOUR_SITE/api/cron/videos',
+    headers := jsonb_build_object('Authorization', 'Bearer YOUR_SECRET'),
+    timeout_milliseconds := 30000
+  );
+  $$
+);

@@ -1,0 +1,145 @@
+/**
+ * Posting to the formulak Facebook Page and @formulak.news through the FORMULA K Meta app.
+ * META_TOKEN is the formulak-publisher system user's token (Formula K business portfolio, Page "Content" only).
+ */
+const GRAPH = "https://graph.facebook.com/v23.0";
+export const FORMULAK_PAGE_ID = process.env.META_PAGE_ID ?? "";
+
+export class MetaError extends Error {}
+
+async function graph<T>(path: string, params: Record<string, string>, method: "GET" | "POST" = "GET"): Promise<T> {
+  const body = new URLSearchParams(params);
+  const url = method === "GET" ? `${GRAPH}/${path}?${body}` : `${GRAPH}/${path}`;
+  const res = await fetch(url, {
+    method,
+    body: method === "POST" ? body : undefined,
+    signal: AbortSignal.timeout(30_000),
+  });
+  const json = (await res.json().catch(() => ({}))) as T & { error?: { message?: string; code?: number; error_subcode?: number } };
+  if (!res.ok || json.error) {
+    // The code and Meta's own usage headers say which limit was hit (app, Page or Instagram account).
+    const usage = ["x-app-usage", "x-business-use-case-usage"].map((h) => res.headers.get(h)).filter(Boolean).join(" ");
+    const code = json.error?.code ? ` [${json.error.code}${json.error.error_subcode ? `/${json.error.error_subcode}` : ""}]` : "";
+    throw new MetaError(`${json.error?.message ?? `Meta ${res.status}`}${code}${usage ? ` usage: ${usage.slice(0, 300)}` : ""}`);
+  }
+  return json;
+}
+
+/** Meta's usage headers and Instagram's publishing quota, for /api/meta/check (reads only, posts nothing). */
+export async function metaUsage(t: MetaTargets): Promise<Record<string, unknown>> {
+  const out: Record<string, unknown> = {};
+  if (t.igId) {
+    const res = await fetch(`${GRAPH}/${t.igId}/content_publishing_limit?${new URLSearchParams({ fields: "config,quota_usage", access_token: t.pageToken })}`, { signal: AbortSignal.timeout(30_000) });
+    out.instagramQuota = await res.json().catch(() => null);
+    out.instagramHeaders = Object.fromEntries(["x-app-usage", "x-business-use-case-usage"].map((h) => [h, res.headers.get(h)]));
+  }
+  const res = await fetch(`${GRAPH}/${t.pageId}?${new URLSearchParams({ fields: "id", access_token: t.pageToken })}`, { signal: AbortSignal.timeout(30_000) });
+  out.pageHeaders = Object.fromEntries(["x-app-usage", "x-page-usage", "x-business-use-case-usage"].map((h) => [h, res.headers.get(h)]));
+  return out;
+}
+
+export type MetaTargets = { pageId: string; pageName: string; pageToken: string; igId: string | null; igUsername: string | null };
+
+/** The formulak Page's own token and its linked Instagram account. Refuses any other Page. */
+export async function metaTargets(): Promise<MetaTargets> {
+  const token = process.env.META_TOKEN;
+  if (!token) throw new MetaError("META_TOKEN is not set in Vercel");
+  const page = await graph<{ id: string; name: string; access_token?: string; instagram_business_account?: { id: string; username?: string } }>(
+    FORMULAK_PAGE_ID,
+    { fields: "id,name,access_token,instagram_business_account{id,username}", access_token: token },
+  );
+  if (!FORMULAK_PAGE_ID || page.id !== FORMULAK_PAGE_ID || !page.access_token) throw new MetaError("The token cannot post to the formulak Page");
+  return {
+    pageId: page.id,
+    pageName: page.name,
+    pageToken: page.access_token,
+    igId: page.instagram_business_account?.id ?? null,
+    igUsername: page.instagram_business_account?.username ?? null,
+  };
+}
+
+export async function facebookFeed(t: MetaTargets, imageUrl: string, caption: string): Promise<string> {
+  const r = await graph<{ post_id?: string; id: string }>(`${t.pageId}/photos`, { url: imageUrl, caption, access_token: t.pageToken }, "POST");
+  return r.post_id ?? r.id;
+}
+
+export async function facebookStory(t: MetaTargets, imageUrl: string): Promise<string> {
+  const photo = await graph<{ id: string }>(`${t.pageId}/photos`, { url: imageUrl, published: "false", access_token: t.pageToken }, "POST");
+  const r = await graph<{ post_id?: string; id?: string }>(`${t.pageId}/photo_stories`, { photo_id: photo.id, access_token: t.pageToken }, "POST");
+  return r.post_id ?? r.id ?? photo.id;
+}
+
+/** Instagram fetches and processes each file; wait until the container is ready. */
+async function igReady(t: MetaTargets, id: string, tries: number, waitMs: number): Promise<void> {
+  for (let i = 0; i < tries; i++) {
+    const s = await graph<{ status_code?: string }>(id, { fields: "status_code", access_token: t.pageToken });
+    if (s.status_code === "FINISHED") return;
+    if (s.status_code === "ERROR" || s.status_code === "EXPIRED") throw new MetaError(`Instagram could not process the file (${s.status_code})`);
+    await new Promise((r) => setTimeout(r, waitMs));
+  }
+}
+
+async function igPublish(t: MetaTargets, params: Record<string, string>, tries = 20, waitMs = 3000): Promise<string> {
+  if (!t.igId) throw new MetaError("No Instagram account is linked to the formulak Page");
+  const c = await graph<{ id: string }>(`${t.igId}/media`, { ...params, access_token: t.pageToken }, "POST");
+  await igReady(t, c.id, tries, waitMs);
+  const p = await graph<{ id: string }>(`${t.igId}/media_publish`, { creation_id: c.id, access_token: t.pageToken }, "POST");
+  return p.id;
+}
+
+/** Up to 10 images (all the same shape) as one Instagram carousel post (the daily round-up). */
+export async function instagramCarousel(t: MetaTargets, imageUrls: string[], caption: string): Promise<string> {
+  if (!t.igId) throw new MetaError("No Instagram account is linked to the formulak Page");
+  if (imageUrls.length < 2 || imageUrls.length > 10) throw new MetaError(`A carousel needs 2-10 images (got ${imageUrls.length})`);
+  const children: string[] = [];
+  for (const url of imageUrls) {
+    const c = await graph<{ id: string }>(`${t.igId}/media`, { image_url: url, is_carousel_item: "true", access_token: t.pageToken }, "POST");
+    children.push(c.id);
+  }
+  for (const id of children) await igReady(t, id, 15, 3000);
+  return igPublish(t, { media_type: "CAROUSEL", children: children.join(","), caption });
+}
+
+export const instagramFeed = (t: MetaTargets, imageUrl: string, caption: string) => igPublish(t, { image_url: imageUrl, caption });
+export const instagramStory = (t: MetaTargets, imageUrl: string) => igPublish(t, { image_url: imageUrl, media_type: "STORIES" });
+
+/** A 9:16 MP4 (≤60 s, H.264 + AAC) as an Instagram story. Video takes longer to process, so it waits up to ~2 minutes. */
+export const instagramVideoStory = (t: MetaTargets, videoUrl: string) => igPublish(t, { video_url: videoUrl, media_type: "STORIES" }, 24, 6000);
+
+/** A 9:16 MP4 as a Facebook Page story: start an upload, let Facebook fetch the file, then finish. */
+export async function facebookVideoStory(t: MetaTargets, videoUrl: string): Promise<string> {
+  const start = await graph<{ video_id: string; upload_url: string }>(`${t.pageId}/video_stories`, { upload_phase: "start", access_token: t.pageToken }, "POST");
+  const up = await fetch(start.upload_url, {
+    method: "POST",
+    headers: { Authorization: `OAuth ${t.pageToken}`, file_url: videoUrl },
+    signal: AbortSignal.timeout(120_000),
+  });
+  if (!up.ok) throw new MetaError(`Facebook could not fetch the video (${up.status})`);
+  const done = await graph<{ success?: boolean; post_id?: string }>(
+    `${t.pageId}/video_stories`,
+    { upload_phase: "finish", video_id: start.video_id, access_token: t.pageToken },
+    "POST",
+  );
+  return done.post_id ?? start.video_id;
+}
+
+/** A 9:16 MP4 as an Instagram Reel, also shown in the profile grid (the daily scenery feed post). */
+export const instagramReel = (t: MetaTargets, videoUrl: string, caption: string) =>
+  igPublish(t, { video_url: videoUrl, media_type: "REELS", caption, share_to_feed: "true" }, 24, 6000);
+
+/** A 9:16 MP4 as a Facebook Reel on the formulak Page: start, let Facebook fetch the file, then publish. */
+export async function facebookReel(t: MetaTargets, videoUrl: string, description: string): Promise<string> {
+  const start = await graph<{ video_id: string; upload_url: string }>(`${t.pageId}/video_reels`, { upload_phase: "start", access_token: t.pageToken }, "POST");
+  const up = await fetch(start.upload_url, {
+    method: "POST",
+    headers: { Authorization: `OAuth ${t.pageToken}`, file_url: videoUrl },
+    signal: AbortSignal.timeout(120_000),
+  });
+  if (!up.ok) throw new MetaError(`Facebook could not fetch the video (${up.status})`);
+  const done = await graph<{ success?: boolean; post_id?: string }>(
+    `${t.pageId}/video_reels`,
+    { upload_phase: "finish", video_id: start.video_id, video_state: "PUBLISHED", description, access_token: t.pageToken },
+    "POST",
+  );
+  return done.post_id ?? start.video_id;
+}
