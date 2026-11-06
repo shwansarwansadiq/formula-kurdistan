@@ -3,7 +3,8 @@
 name: render-videos
 
 on:
-  # Scheduled runs are off until formulak.news is live and social posting is set up (phase 5).
+  schedule:
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 permissions:
