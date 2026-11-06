@@ -60,7 +60,7 @@ select cron.schedule(
 select cron.unschedule(jobname) from cron.job where jobname = 'formulak-videos';
 select cron.schedule(
   'formulak-videos',
-  '3,18,33,48 * * * *',
+  '*/15 * * * *',
   $$
   select net.http_get(
     url := 'https://YOUR_SITE/api/cron/videos',
