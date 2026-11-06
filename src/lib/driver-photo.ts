@@ -12,7 +12,7 @@ const strip = (html: string) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " "
 
 type Candidate = { title: string; url: string; credit: string };
 
-async function candidates(name: string, season: string): Promise<Candidate[]> {
+export async function candidates(name: string, season: string): Promise<Candidate[]> {
   const q = `"${name}" ${season} filetype:bitmap`;
   const j = await fetch(
     `https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=40&gsrsearch=${encodeURIComponent(q)}&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=900`,
@@ -37,7 +37,8 @@ async function candidates(name: string, season: string): Promise<Candidate[]> {
 }
 
 /** Asks the vision model whether the photo shows this driver alone, face visible, in a racing suit. */
-async function inRacingSuit(url: string): Promise<boolean> {
+/** The model's raw answer, for the admin debug view. */
+export async function suitAnswer(url: string): Promise<string> {
   // Sent as bytes: Wikimedia refuses some automated fetchers, so we download it ourselves with our user agent.
   const img = await fetch(url, { headers: UA, signal: AbortSignal.timeout(15_000) });
   if (!img.ok) throw new Error(`photo ${img.status}`);
@@ -57,9 +58,10 @@ async function inRacingSuit(url: string): Promise<boolean> {
       },
     ],
   });
-  const text = res.content.map((c) => (c.type === "text" ? c.text : "")).join("").toLowerCase();
-  return text.trim().startsWith("yes");
+  return res.content.map((c) => (c.type === "text" ? c.text : "")).join("").toLowerCase().trim();
 }
+
+const inRacingSuit = async (url: string) => (await suitAnswer(url)).startsWith("yes");
 
 /** Titles that usually mean a person, not a car on track, are checked first. */
 const PERSON = /award|celebrat|podium|walk|parade|portrait|driver|press|interview|paddock|garage|helmet|grid|fans/i;
