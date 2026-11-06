@@ -84,7 +84,7 @@ async function lookup(name: string, season: string): Promise<DriverPhoto | null>
 export async function driverPhoto(name: string, season: string): Promise<DriverPhoto | null> {
   if (!name.trim() || !/^\d{4}$/.test(season)) return null;
   try {
-    return await unstable_cache(() => lookup(name, season), ["driver-photo-v4", name, season], { revalidate: 7 * 86400 })();
+    return await unstable_cache(() => lookup(name, season), ["driver-photo-v5", name, season], { revalidate: 7 * 86400 })();
   } catch {
     return null;
   }
