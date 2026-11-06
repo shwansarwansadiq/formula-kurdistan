@@ -45,5 +45,10 @@ insert into glossary (english, sorani, note) values
   ('circuit', 'بازنەی پێشبڕکێ', null),
   ('engine', 'بزوێنەر', null),
   ('contract', 'گرێبەست', null),
-  ('budget cap', 'سنووری بودجە', null)
+  ('budget cap', 'سنووری بودجە', null),
+  ('calendar', 'ڕۆژژمێر', null),
+  ('points', 'خاڵ', null),
+  ('wins', 'بردنەوە', null),
+  ('nationality', 'ڕەگەزنامە', null),
+  ('winner', 'براوە', null)
 on conflict (english) do update set sorani = excluded.sorani, note = excluded.note, updated_at = now();
