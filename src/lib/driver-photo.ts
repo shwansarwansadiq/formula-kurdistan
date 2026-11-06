@@ -38,6 +38,12 @@ async function candidates(name: string, season: string): Promise<Candidate[]> {
 
 /** Asks the vision model whether the photo shows this driver alone, face visible, in a racing suit. */
 async function inRacingSuit(url: string): Promise<boolean> {
+  // Sent as bytes: Wikimedia refuses some automated fetchers, so we download it ourselves with our user agent.
+  const img = await fetch(url, { headers: UA, signal: AbortSignal.timeout(15_000) });
+  if (!img.ok) throw new Error(`photo ${img.status}`);
+  const type = img.headers.get("content-type")?.split(";")[0] ?? "image/jpeg";
+  if (!/^image\/(jpeg|png|webp|gif)$/.test(type)) return false;
+  const data = Buffer.from(await img.arrayBuffer()).toString("base64");
   const res = await ai().messages.create({
     model: SCORE_MODEL,
     max_tokens: 20,
@@ -45,7 +51,7 @@ async function inRacingSuit(url: string): Promise<boolean> {
       {
         role: "user",
         content: [
-          { type: "image", source: { type: "url", url } },
+          { type: "image", source: { type: "base64", media_type: type as "image/jpeg", data } },
           { type: "text", text: "Is this one person (not a group, not only a car), face clearly visible, wearing a motor racing suit (fireproof overalls)? Answer only yes or no." },
         ],
       },
@@ -62,7 +68,11 @@ async function lookup(name: string, season: string): Promise<DriverPhoto | null>
   const list = await candidates(name, season);
   const ordered = [...list.filter((c) => PERSON.test(c.title)), ...list.filter((c) => !PERSON.test(c.title))];
   for (const c of ordered.slice(0, 12)) {
-    if (await inRacingSuit(c.url).catch(() => false)) return { url: c.url, credit: c.credit };
+    try {
+      if (await inRacingSuit(c.url)) return { url: c.url, credit: c.credit };
+    } catch (e) {
+      console.error("driver photo check failed", c.title, e);
+    }
   }
   return null;
 }
@@ -71,7 +81,7 @@ async function lookup(name: string, season: string): Promise<DriverPhoto | null>
 export async function driverPhoto(name: string, season: string): Promise<DriverPhoto | null> {
   if (!name.trim() || !/^\d{4}$/.test(season)) return null;
   try {
-    return await unstable_cache(() => lookup(name, season), ["driver-photo-v3", name, season], { revalidate: 7 * 86400 })();
+    return await unstable_cache(() => lookup(name, season), ["driver-photo-v4", name, season], { revalidate: 7 * 86400 })();
   } catch {
     return null;
   }
