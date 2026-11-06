@@ -1,6 +1,7 @@
 import { AdminShell } from "@/components/admin/AdminShell";
 import { metaTargets } from "@/lib/meta";
-import { tiktokConfigured, tiktokStatus } from "@/lib/tiktok";
+import { db } from "@/lib/db";
+import { draftStatus, tiktokConfigured, tiktokStatus } from "@/lib/tiktok";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,20 @@ export default async function ConnectionsPage() {
   );
   const tiktok = await tiktokStatus().catch(() => ({ connected: false }));
 
+  const { data: sent } = await db()
+    .from("stories")
+    .select("id, tiktok_publish_id")
+    .eq("tiktok_result", "sent")
+    .not("tiktok_publish_id", "is", null)
+    .order("tiktok_sent_at", { ascending: false })
+    .limit(5);
+  const drafts = await Promise.all(
+    ((sent ?? []) as { id: number; tiktok_publish_id: string }[]).map(async (d) => ({
+      id: d.id,
+      status: await draftStatus(d.tiktok_publish_id).catch((e: unknown) => (e instanceof Error ? e.message : String(e))),
+    })),
+  );
+
   return (
     <AdminShell active="tiktok" title="پەیوەندییەکان">
       <p>ئەم پەڕەیە تەنها پشکنین دەکات و هیچ شتێک بڵاو ناکاتەوە.</p>
@@ -22,6 +37,12 @@ export default async function ConnectionsPage() {
         <dd>{meta.instagram ? <bdi>@{meta.instagram}</bdi> : "پەیوەست نییە"}</dd>
         <dt>TikTok</dt>
         <dd>{tiktok.connected ? "پەیوەستە" : tiktokConfigured() ? "کلیلەکان هەن، هێشتا پەیوەست نەکراوە" : "کلیلەکان دانەنراون"}</dd>
+        {drafts.map((d) => (
+          <div key={d.id} data-draft={d.id}>
+            <dt>TikTok draft #{d.id}</dt>
+            <dd><bdi>{d.status}</bdi></dd>
+          </div>
+        ))}
       </dl>
     </AdminShell>
   );
