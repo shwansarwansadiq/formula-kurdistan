@@ -9,7 +9,7 @@ change or share keys with Kurean's repo, database, Meta app or TikTok app.** Kur
 machinery in depth: pipeline, social publishing, Meta limits, videos.
 
 - Plan: https://claude.ai/artifact/DUMNUXYcp8YivV7xyUXHNE
-- Domain: formulak.news (Namecheap, not pointed at Vercel yet). Repo: shwansarwansadiq/formula-kurdistan (public, for free video rendering).
+- Domain: formulak.news (Namecheap DNS, live on Vercel; www redirects to it). Repo: shwansarwansadiq/formula-kurdistan (public, for free video rendering).
 - Supabase: organization FORMULAK, project `formulak`, ref `xvgfivlaohujxyggkbjo`, Europe.
 
 ## Status
