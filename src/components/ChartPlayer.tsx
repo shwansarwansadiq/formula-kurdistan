@@ -1,6 +1,6 @@
 "use client";
 /**
- * Plays the chart's official YouTube videos inside Formula K with YouTube's own embedded player (youtube-nocookie,
+ * Plays the chart's official YouTube videos inside FORMULAK with YouTube's own embedded player (youtube-nocookie,
  * loaded only after a tap). The video stays visible (YouTube's rules: no audio-only, at least 200×200 px).
  * The rows are server-rendered links to YouTube; this only takes over their clicks, so without script they still work.
  */

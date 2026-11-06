@@ -1,5 +1,5 @@
 /* A scenery story (8.5 s): a Korea landscape or landmark (Pixabay or Pexels) with a slow drift, the place name in Sorani,
-   the photographer's credit, the Formula K mark, and one of Formula K's own music loops. Inside TikTok/Reels safe areas. */
+   the photographer's credit, the FORMULAK mark, and one of FORMULAK's own music loops. Inside TikTok/Reels safe areas. */
 import { AbsoluteFill, Audio, Img, interpolate, OffthreadVideo, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { C, easeOut, LATIN, Mark, SAFE, SORANI, useSpring, useT, Wordmark } from "./brand";
 
@@ -42,11 +42,10 @@ export function Scenery({ kind, src, placeCkb, placeEn, photographer, source = "
         )}
       </AbsoluteFill>
       {/* Shade only where the words sit, so the picture stays the star */}
-      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(42,30,59,0.5) 0%, rgba(42,30,59,0) 22%, rgba(42,30,59,0) 50%, rgba(42,30,59,0.72) 100%)" }} />
+      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0) 22%, rgba(10,10,10,0) 50%, rgba(10,10,10,0.72) 100%)" }} />
 
       <div style={{ position: "absolute", top: SAFE.top, left: SAFE.left, right: SAFE.right, display: "flex", justifyContent: "flex-end", opacity: top, transform: `translateY(${(1 - top) * -40}px)` }}>
         <span dir="ltr" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <Mark size={84} start={8} />
           <Wordmark size={64} />
         </span>
       </div>
@@ -58,7 +57,7 @@ export function Scenery({ kind, src, placeCkb, placeEn, photographer, source = "
             alignItems: "center",
             gap: 18,
             alignSelf: "flex-start",
-            background: "rgba(42,30,59,0.62)",
+            background: "rgba(10,10,10,0.62)",
             border: "2px solid rgba(255,255,255,0.22)",
             borderRadius: 44,
             padding: "26px 34px 30px",

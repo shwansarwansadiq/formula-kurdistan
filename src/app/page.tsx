@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Bidi } from "@/components/Bidi";
-import { Sun } from "@/components/Logo";
 import { Masthead } from "@/components/Masthead";
 import { CategoryChip, Photo, SiteFooter, storyHref, Tracklist } from "@/components/StoryParts";
 import { CATEGORY_KEYS, CATEGORY_META, issueNumber, ku, publishedStories, readingMinutes } from "@/lib/site";
@@ -24,7 +23,6 @@ export default async function Home() {
                 <CategoryChip story={lead} glass />
               </div>
               <div className="field" style={{ background: CATEGORY_META[lead.category].colour }}>
-                <Sun className="field-sun" />
                 <h1 className="lead-title">
                   <Bidi text={lead.headline} />
                 </h1>
@@ -46,7 +44,6 @@ export default async function Home() {
           </article>
         ) : (
           <section className="empty field" style={{ background: "var(--berry)" }}>
-            <Sun className="field-sun spin" />
             <h1 className="lead-title">یەکەم هەواڵ بەم زووانە دێت</h1>
             <p className="lead-dek">فۆڕمولا کەی هەواڵی فۆڕمولا ١ و جیهانی پێشبڕکێی فۆڕمولا بە کوردی دەنووسێت. شوێنمان بکەوە تا یەکەم هەواڵ لەدەست نەدەیت.</p>
           </section>

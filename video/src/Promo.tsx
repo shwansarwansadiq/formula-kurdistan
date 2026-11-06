@@ -1,4 +1,4 @@
-/* Formula K's 9:16 promo (28 s): everything the site does, in the brand's colour chapters.
+/* FORMULAK's 9:16 promo (28 s): everything the site does, in the brand's colour chapters.
    1 mark draws itself · 2 "Korean news in Kurdish" · 3 the four categories · 4 every story credited ·
    5 Seoul ↔ Hawler clocks · 6 the weekly top 100 you can play · 7 videos and socials · 8 formulak.news */
 import { AbsoluteFill, interpolate, Sequence, useCurrentFrame } from "remotion";
@@ -108,7 +108,7 @@ function Credited() {
         {SOURCES.map((s, i) => {
           const t = interpolate(f, [24 + i * 7, 38 + i * 7], [0, 1], { ...clamp, easing: easeOut });
           return (
-            <div key={s} dir="rtl" style={{ display: "flex", alignItems: "center", gap: 24, background: "#fff", borderRadius: 32, padding: "20px 32px", boxShadow: "0 18px 40px -26px rgba(42,30,59,0.5)", opacity: t, transform: `translateX(${(1 - t) * 200}px)` }}>
+            <div key={s} dir="rtl" style={{ display: "flex", alignItems: "center", gap: 24, background: "#fff", borderRadius: 32, padding: "20px 32px", boxShadow: "0 18px 40px -26px rgba(10,10,10,0.5)", opacity: t, transform: `translateX(${(1 - t) * 200}px)` }}>
               <span style={{ font: `800 44px/1 ${SORANI}`, color: "#5E4F72" }}>سەرچاوە:</span>
               <span style={{ font: `800 54px/1 ${LATIN}`, color: C.plum }}>{s}</span>
             </div>
@@ -200,7 +200,7 @@ function TopHundred() {
         })}
       </div>
       {/* the player card rising, like on the site */}
-      <div style={{ position: "absolute", left: SAFE.left - 20, right: SAFE.right - 30, bottom: SAFE.bottom - 20, background: C.plum, borderRadius: 44, padding: 22, transform: `translateY(${(1 - player) * 900}px)`, boxShadow: "0 40px 90px -30px rgba(42,30,59,0.8)" }}>
+      <div style={{ position: "absolute", left: SAFE.left - 20, right: SAFE.right - 30, bottom: SAFE.bottom - 20, background: C.plum, borderRadius: 44, padding: 22, transform: `translateY(${(1 - player) * 900}px)`, boxShadow: "0 40px 90px -30px rgba(10,10,10,0.8)" }}>
         <div dir="rtl" style={{ display: "flex", alignItems: "center", gap: 22, padding: "4px 8px 22px" }}>
           <span style={{ width: 70, height: 70, borderRadius: 999, background: C.gold, color: C.plum, display: "grid", placeItems: "center", font: `900 40px/1 ${SORANI}` }}>١</span>
           <span style={{ font: `800 50px/1.2 ${LATIN}`, color: "#fff" }}>NEON</span>
@@ -241,10 +241,9 @@ function Socials() {
           <Sun size={800} turn={f * 0.6} core={C.berry} coreOpacity={0.9} />
         </div>
         <div dir="ltr" style={{ position: "absolute", top: 60, left: 0, right: 0, display: "flex", justifyContent: "center", alignItems: "center", gap: 4 }}>
-          <Mark size={56} start={10} />
           <Wordmark size={44} />
         </div>
-        <div dir="rtl" style={{ position: "absolute", left: 26, right: 26, bottom: 40, background: "rgba(42,30,59,0.72)", borderRadius: 30, padding: "26px 28px", font: `900 32px/1.5 ${SORANI}`, color: "#fff" }}>
+        <div dir="rtl" style={{ position: "absolute", left: 26, right: 26, bottom: 40, background: "rgba(10,10,10,0.72)", borderRadius: 30, padding: "26px 28px", font: `900 32px/1.5 ${SORANI}`, color: "#fff" }}>
           هەواڵی ئەمڕۆ لە ١١ چرکەدا
         </div>
       </div>

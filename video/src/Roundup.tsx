@@ -1,4 +1,4 @@
-/* The day's news in one 9:16 video (Shwan, 6 Nov), posted at 21:00 as a Reel and story with Formula K's own music.
+/* The day's news in one 9:16 video (Shwan, 6 Nov), posted at 21:00 as a Reel and story with FORMULAK's own music.
    Intro (date and count) → each story for 3.5 s (photo drifting, number, category, headline) → logo end card.
    All text inside the TikTok/Reels safe area. */
 import { AbsoluteFill, Audio, Img, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
@@ -48,7 +48,6 @@ function Intro({ dateLabel, count }: { dateLabel: string; count: number }) {
       </div>
       <div style={{ position: "absolute", top: SAFE.top, left: SAFE.left, right: SAFE.right, display: "flex", justifyContent: "flex-end", opacity: top }}>
         <span dir="ltr" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <Mark size={92} start={2} />
           <Wordmark size={74} />
         </span>
       </div>
@@ -82,10 +81,10 @@ function Item({ item, n, total }: { item: RoundupItem; n: number; total: number 
           </div>
         </AbsoluteFill>
       )}
-      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(42,30,59,0.6) 0%, rgba(42,30,59,0) 28%, rgba(42,30,59,0) 42%, rgba(42,30,59,0.9) 100%)" }} />
+      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0) 28%, rgba(10,10,10,0) 42%, rgba(10,10,10,0.9) 100%)" }} />
       <div style={{ position: "absolute", top: SAFE.top, left: SAFE.left, right: SAFE.right, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span style={{ font: `800 38px/1 ${SORANI}`, color: "#fff", background: item.colour, padding: "20px 32px 24px", borderRadius: 999, border: "2px solid rgba(255,255,255,0.4)" }}>{item.label}</span>
-        <span style={{ font: `800 40px/1 ${SORANI}`, color: "#fff", textShadow: "0 2px 14px rgba(42,30,59,0.6)" }}>
+        <span style={{ font: `800 40px/1 ${SORANI}`, color: "#fff", textShadow: "0 2px 14px rgba(10,10,10,0.6)" }}>
           {ku(n)} لە {ku(total)}
         </span>
       </div>
@@ -98,7 +97,7 @@ function Item({ item, n, total }: { item: RoundupItem; n: number; total: number 
           bottom: SAFE.bottom,
           padding: "44px 52px 50px",
           borderRadius: 56,
-          background: "rgba(42,30,59,0.7)",
+          background: "rgba(10,10,10,0.7)",
           border: "2px solid rgba(255,255,255,0.22)",
           opacity: panel,
           transform: `translateY(${(1 - panel) * 140}px)`,

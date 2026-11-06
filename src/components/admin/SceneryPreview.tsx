@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element -- Pixabay/Pexels files */
 /**
  * What a scenery candidate will look like once it is made (Shwan, 2 Nov): the clip with the place card, the credit,
- * the Formula K mark and its music, before he approves it. The finished MP4 is only rendered after approval, so this
+ * the FORMULAK mark and its music, before he approves it. The finished MP4 is only rendered after approval, so this
  * draws the same layout over the source clip (positions follow `video/src/Scenery.tsx`). Tap to play with music.
  */
 import { useEffect, useRef, useState } from "react";

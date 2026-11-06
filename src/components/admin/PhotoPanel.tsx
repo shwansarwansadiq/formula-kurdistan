@@ -80,7 +80,7 @@ export function PhotoPanel({ story }: { story: AdminStory }) {
           {story.gallery.map((g) => (
             <li key={g.url}>
               <img src={g.url} alt="" loading="lazy" />
-              <small dir="ltr">{g.credit ?? "FORMULA K"}</small>
+              <small dir="ltr">{g.credit ?? "FORMULAK"}</small>
               <form action={removeFromGallery}>
                 <input type="hidden" name="id" value={story.id} />
                 <input type="hidden" name="url" value={g.url} />

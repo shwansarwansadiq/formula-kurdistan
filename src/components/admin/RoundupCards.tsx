@@ -1,7 +1,7 @@
 /* The daily round-up's own slides (Shwan, 6 Nov), at real size like SocialCards: the cover lists the day's headlines
    as a numbered tracklist (the site's "album" idea), the end slide sends people to formulak.news. 1080×1350 or ×1920. */
 import { Bidi } from "@/components/Bidi";
-import { Mark, Sun } from "@/components/Logo";
+import { Logo } from "@/components/Logo";
 import { CATEGORY_META, ku } from "@/lib/site";
 import type { RoundupStory } from "@/lib/roundup";
 import "./social.css";
@@ -11,12 +11,10 @@ export function RoundupCover({ dateLabel, stories, format }: { dateLabel: string
   const dense = stories.length > 5;
   return (
     <div className={`sc rc rc-${format}${dense ? " rc-dense" : ""}`} id="card" style={{ height: h }}>
-      <Sun className="cc-sun" />
       <div className="cc-in">
         <div className="cc-top">
           <span className="sc-logo" dir="ltr">
-            <Mark size={70} ink="#fff" />
-            <span>kur<i>ean</i></span>
+            <Logo size={56} />
           </span>
           <span className="cc-chip">هەواڵەکانی ڕۆژ</span>
         </div>
@@ -56,11 +54,9 @@ export function RoundupEnd({ format }: { format: "feed" | "story" }) {
   const h = format === "feed" ? 1350 : 1920;
   return (
     <div className={`sc re re-${format}`} id="card" style={{ height: h }}>
-      <Sun className="re-sun" />
       <div className="re-in">
         <span className="re-logo" dir="ltr">
-          <Mark size={190} ink="#fff" />
-          <span>kur<i>ean</i></span>
+          <Logo size={120} />
         </span>
         <p className="re-line">هەموو ڕۆژێک هەواڵی فۆڕمولا ١ بە کوردی</p>
         <p className="re-cats">پێشبڕکێکان · تیم و شۆفێران · تەکنیک و یاسا · بازرگانی</p>

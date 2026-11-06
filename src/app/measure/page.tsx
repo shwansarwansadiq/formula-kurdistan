@@ -29,7 +29,7 @@ export default function Measure() {
         <div className="art-body">
           <p>فۆڕمولا کەی خوێنەرانی خۆی بە ئامرازێکی خۆی دەژمێرێت، بێ کوکی و بێ هەڵگرتنی ناونیشانی IP. هیچ داتایەک نافرۆشین و بە کەسی تر نادەین.</p>
           <p dir="ltr" lang="en" style={{ fontFamily: "var(--latin)", fontSize: 15 }}>
-            Formula K counts its readers with its own first-party tool. No cookies, no third-party trackers, no stored IP addresses.
+            FORMULAK counts its readers with its own first-party tool. No cookies, no third-party trackers, no stored IP addresses.
             All times are Asia/Baghdad. Days still in progress, and days before counting began, are labelled as incomplete.
           </p>
         </div>

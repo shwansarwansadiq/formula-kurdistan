@@ -19,7 +19,7 @@ function MovePill({ m, big = false }: { m: ChartItem; big?: boolean }) {
   if (m.move === "same") return <span style={{ ...base, background: "rgba(255,255,255,0.14)", color: "#fff" }}>لە شوێنی خۆی</span>;
   const up = m.move === "up";
   return (
-    <span style={{ ...base, background: up ? "rgba(63,168,142,0.28)" : "rgba(232,80,138,0.28)", color: up ? "#8EF0D2" : "#FFB0CC" }}>
+    <span style={{ ...base, background: up ? "rgba(63,168,142,0.28)" : "rgba(225,6,0,0.28)", color: up ? "#8EF0D2" : "#FFB0CC" }}>
       <svg viewBox="0 0 12 12" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d={up ? "M2.5 7.5 6 4l3.5 3.5" : "M2.5 4.5 6 8l3.5-3.5"} />
       </svg>
@@ -100,7 +100,7 @@ function NumberOne({ m, week }: { m: ChartItem; week: number }) {
         <span style={{ font: `800 50px/1 ${SORANI}`, color: C.plum, background: C.gold, alignSelf: "flex-start", padding: "20px 34px 26px", borderRadius: 999, opacity: rest }}>
           یەکەمی هەفتەی {ku(week)}
         </span>
-        <span style={{ font: `900 400px/0.85 ${SORANI}`, color: C.gold, transform: `scale(${0.4 + 0.6 * num})`, transformOrigin: "right center", textShadow: "0 30px 80px rgba(42,30,59,0.35)" }}>{ku(1)}</span>
+        <span style={{ font: `900 400px/0.85 ${SORANI}`, color: C.gold, transform: `scale(${0.4 + 0.6 * num})`, transformOrigin: "right center", textShadow: "0 30px 80px rgba(10,10,10,0.35)" }}>{ku(1)}</span>
         <b dir="ltr" style={{ font: `800 100px/1.04 ${LATIN}`, color: "#fff", textAlign: "right", letterSpacing: "-0.03em", opacity: title, transform: `translateY(${(1 - title) * 70}px)`, overflowWrap: "anywhere" }}>
           {m.title}
         </b>
@@ -133,7 +133,6 @@ export function Chart({ week, top }: ChartProps) {
       <div style={{ position: "absolute", top: SAFE.top, left: SAFE.left, right: SAFE.right, display: "flex", justifyContent: "space-between", alignItems: "center", opacity: head, transform: `translateY(${(1 - head) * -50}px)` }}>
         <span style={{ font: `800 40px/1 ${SORANI}`, color: C.plum, background: C.gold, padding: "22px 34px 26px", borderRadius: 999 }}>ڕیزبەندیی هەفتە</span>
         <span dir="ltr" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <Mark size={88} start={6} />
           <Wordmark size={70} />
         </span>
       </div>

@@ -1,6 +1,6 @@
 /**
  * Scenery stories (Shwan's request): between the news on Instagram and Facebook stories, one photo or short clip of
- * Korea's nature or landmarks, in Formula K's design with royalty-free music Formula K owns.
+ * Korea's nature or landmarks, in FORMULAK's design with royalty-free music FORMULAK owns.
  * Source: Pixabay videos (PIXABAY_API_KEY; Pexels paused new API keys on 31 Oct 2026). Pexels still works if a
  * PEXELS_API_KEY is ever set. Pixabay's free API gives photos only up to 1280 px tall (blurry full-screen), so only
  * its vertical full-HD videos are used.
@@ -273,7 +273,7 @@ type FeedItem = { id: number; kind: string; place_ckb: string; place_en: string;
 export function feedCaptions(s: FeedItem) {
   const credit = `${s.kind === "video" ? "🎥 Video" : "📷 Photo"}: ${s.photographer} · ${s.source === "pixabay" ? "Pixabay" : "Pexels"}`;
   const body = `${s.place_ckb} 📍\n${s.place_en}\n\nپشوویەک لە نێوان هەواڵەکاندا: دیمەنێکی کۆریا لەگەڵ مۆسیقای فۆڕمولا کەی.`;
-  const tags = "#فۆڕمولا کەی #کۆریا #Korea #Formula K";
+  const tags = "#فۆڕمولا کەی #کۆریا #Korea #FORMULAK";
   return {
     instagram: `${body}\nهەواڵی ڕۆژانەی کۆریا لە formulak.news\n\n${credit}\n\n${tags}`,
     facebook: `${body}\nهەواڵی ڕۆژانەی کۆریا: https://formulak.news\n\n${credit}\n\n${tags}`,

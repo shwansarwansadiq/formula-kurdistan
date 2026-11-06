@@ -119,12 +119,12 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
             digits={digits}
             labels={a.daily.map((d) => d.day)}
             series={[
-              { name: "بینین", color: "#E8508A", values: a.daily.map((d) => d.pageviews) },
-              { name: "خوێنەر", color: "#2A1E3B", values: a.daily.map((d) => d.visitors) },
+              { name: "بینین", color: "#E10600", values: a.daily.map((d) => d.pageviews) },
+              { name: "خوێنەر", color: "#0A0A0A", values: a.daily.map((d) => d.visitors) },
             ]}
           />
         ) : <p className="empty-note">هێشتا داتا نییە بۆ ئەم ماوەیە.</p>}
-        <p className="legend-inline"><i style={{ background: "#E8508A" }} /> بینین <i style={{ background: "#2A1E3B" }} /> خوێنەر</p>
+        <p className="legend-inline"><i style={{ background: "#E10600" }} /> بینین <i style={{ background: "#0A0A0A" }} /> خوێنەر</p>
       </section>
 
       <div className="an-grid">
@@ -142,15 +142,15 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <section className="panel">
           <h2 className="adm-h2">سەرچاوەی خوێنەران</h2>
           <Donut digits={digits} rows={a.sources.map((s) => ({ label: SOURCE_LABEL[s.key] ?? s.key, value: s.pageviews ?? 0 }))} />
-          {a.referrers.length ? <><h3 className="an-h3">ماڵپەڕەکان</h3><Bars digits={digits} rows={a.referrers.map((r) => ({ label: r.key, value: r.pageviews ?? 0, color: "#9B7BEA" }))} /></> : null}
+          {a.referrers.length ? <><h3 className="an-h3">ماڵپەڕەکان</h3><Bars digits={digits} rows={a.referrers.map((r) => ({ label: r.key, value: r.pageviews ?? 0, color: "#171717" }))} /></> : null}
         </section>
         <section className="panel">
           <h2 className="adm-h2">ئامێر</h2>
           <Donut digits={digits} rows={a.devices.map((d) => ({ label: DEVICE_LABEL[d.key] ?? d.key, value: d.visitors ?? 0 }))} />
           <h3 className="an-h3">سیستەم</h3>
-          <Bars digits={digits} rows={a.os.map((o) => ({ label: o.key, value: o.visitors ?? 0, color: "#2A1E3B" }))} />
+          <Bars digits={digits} rows={a.os.map((o) => ({ label: o.key, value: o.visitors ?? 0, color: "#0A0A0A" }))} />
           <h3 className="an-h3">وێبگەڕ</h3>
-          <Bars digits={digits} rows={a.browsers.map((o) => ({ label: o.key, value: o.visitors ?? 0, color: "#9B7BEA" }))} />
+          <Bars digits={digits} rows={a.browsers.map((o) => ({ label: o.key, value: o.visitors ?? 0, color: "#171717" }))} />
           <h3 className="an-h3">زمانی وێبگەڕ</h3>
           <Bars digits={digits} rows={a.langs.map((o) => ({ label: o.key, value: o.visitors ?? 0, color: "#3FA88E" }))} />
         </section>
@@ -181,7 +181,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <section className="panel">
           <h2 className="adm-h2">پەڕەی کۆتایی سەردان</h2>
           <Bars digits={digits} rows={a.exits.map((e) => ({ label: e.key, value: Number(e.exits ?? 0), color: "#8C7A9C" }))} />
-          {a.campaigns.length ? <><h3 className="an-h3">کەمپەینەکان (UTM)</h3><Bars digits={digits} rows={a.campaigns.map((c) => ({ label: c.key, note: String(c.source ?? ""), value: c.pageviews ?? 0, color: "#FFB938" }))} /></> : null}
+          {a.campaigns.length ? <><h3 className="an-h3">کەمپەینەکان (UTM)</h3><Bars digits={digits} rows={a.campaigns.map((c) => ({ label: c.key, note: String(c.source ?? ""), value: c.pageviews ?? 0, color: "#8A8A8A" }))} /></> : null}
         </section>
       </div>
 

@@ -5,7 +5,7 @@ import { connect } from "@/lib/tiktok";
 
 export const runtime = "nodejs";
 
-/** TikTok sends Shwan back here after he allows Formula K; the one-time code becomes the stored tokens. */
+/** TikTok sends Shwan back here after he allows FORMULAK; the one-time code becomes the stored tokens. */
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const jar = await cookies();

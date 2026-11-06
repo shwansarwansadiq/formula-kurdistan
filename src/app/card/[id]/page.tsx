@@ -13,9 +13,9 @@ export default async function Card({ params, searchParams }: { params: Promise<{
   return (
     <main className="card-page">
       {/* The page stays left-to-right and only the card is right-to-left: headless Chromium paints an RTL page blank. */}
-      <style>{`html{direction:ltr}html,body{margin:0;background:#2a1e3b}.skip{display:none}.card-page{width:1080px;direction:rtl}
+      <style>{`html{direction:ltr}html,body{margin:0;background:#0A0A0A}.skip{display:none}.card-page{width:1080px;direction:rtl}
         .sc .glass{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-        .sc .sc-panel{background:rgb(42 30 59 / 0.72)!important}
+        .sc .sc-panel{background:rgb(10 10 10 / 0.72)!important}
         .sc *{animation:none!important}`}</style>
       <SocialCard story={story} format={format} full />
     </main>

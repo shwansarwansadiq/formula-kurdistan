@@ -32,7 +32,7 @@ export async function AdminShell({ active, title, children }: { active: (typeof 
                 چوونەدەرەوە
               </button>
             </form>
-            <Logo size={26} />
+            <Logo size={20} />
           </div>
         </div>
         <nav className="seg" aria-label="داشبۆرد">

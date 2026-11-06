@@ -1,6 +1,6 @@
-# Formula K · فۆڕمولا کەی — project guide for Claude
+# FORMULAK · فۆڕمولا کەی — project guide for Claude
 
-Formula K is an automated Sorani Kurdish news site about Formula 1 first, then the wider formula racing world and
+FORMULAK is an automated Sorani Kurdish news site about Formula 1 first, then the wider formula racing world and
 its industry. Owner: Shwan. The system finds news, writes it in Sorani, designs the posts, and waits; Shwan's only
 job is to approve. **Nothing is ever published without his approval.**
 
@@ -10,7 +10,7 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
 
 - Plan: https://claude.ai/artifact/DUMNUXYcp8YivV7xyUXHNE
 - Domain: formulak.news (Namecheap, not pointed at Vercel yet). Repo: shwansarwansadiq/formula-kurdistan (public, for free video rendering).
-- Supabase: organization FORMULA K, project `formulak`, ref `xvgfivlaohujxyggkbjo`, Europe.
+- Supabase: organization FORMULAK, project `formulak`, ref `xvgfivlaohujxyggkbjo`, Europe.
 
 ## Status
 
@@ -29,13 +29,11 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
   otherwise the largest source photo with credit; agency photos are flagged high risk in /admin; under 800 px gets a branded card; takedowns are immediate.
 - Never use race footage, broadcast screenshots, onboard clips, team radio or F1 audio.
 - Results, positions, points and times are copied from the source, never worked out. Transfers are "reported" until confirmed.
-- `META_PAGE_ID` has no default: posting is refused until it is set to Formula K's Page.
-- Brand rule: no F1 logo, flying-F shape or circuit outlines; the footer carries the independent-site disclaimer.
+- `META_PAGE_ID` has no default: posting is refused until it is set to FORMULAK's Page.
+- Brand (Shwan approved concept A, 6 Nov): FORMULAK wordmark with custom K, paths in src/components/logo-paths.ts. Red #E10600, black #0A0A0A, white, charcoal #171717, grey #8A8A8A; no gradients. No Kurdish symbols, sunburst, flags, car silhouettes, checkered flags or F1 lettering in the brand. Rabar (web use confirmed) is in public/fonts; the footer carries the independent-site disclaimer.
 
 ## Temporary leftovers from Kurean
 
-- The mark, wordmark and colours are placeholders until the logo is approved. Shwan confirmed Rabar may be used on the web (6 Nov);
-  the regular and bold files still need choosing and adding.
 - Inactive and unscheduled: Korea chart (`chart.ts`, `chart-story.ts`, `listen.ts`, `KoreaChart`), scenery (`places.ts`,
   `scenery.ts`). Replace with standings and remove in phase 4. `video/src/Promo.tsx` and sample scenes still describe Korea: rewrite before rendering.
 - Don't use Kurean's music names or copy in new work without checking them. /privacy and analytics text still needs a pass.

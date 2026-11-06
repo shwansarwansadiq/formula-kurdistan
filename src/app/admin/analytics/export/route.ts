@@ -12,7 +12,7 @@ export async function GET(req: Request) {
   const heads = await headlines(a.articles.map((x) => x.story_id));
   const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const lines = [
-    `# Formula K analytics ${from.toISOString()} to ${to.toISOString()}${cat ? ` category ${cat}` : ""}; generated ${a.generated_at}`,
+    `# FORMULAK analytics ${from.toISOString()} to ${to.toISOString()}${cat ? ` category ${cat}` : ""}; generated ${a.generated_at}`,
     "story_id,headline,category,pageviews,visitors,avg_engaged_seconds,avg_scroll_percent",
     ...a.articles.map((r) => [r.story_id, esc(heads.get(r.story_id)), r.category, r.pageviews, r.visitors, r.avg_engaged_ms === null ? "" : (r.avg_engaged_ms / 1000).toFixed(1), r.avg_scroll === null ? "" : r.avg_scroll.toFixed(1)].join(",")),
     "",

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Bidi } from "@/components/Bidi";
-import { Mark, Sun } from "@/components/Logo";
+import { Logo } from "@/components/Logo";
 import type { AdminStory } from "@/lib/admin-data";
 import { CATEGORY_META, ku } from "@/lib/site";
 import type { ChartTopItem } from "@/lib/chart-story";
@@ -34,12 +34,10 @@ function ChartCard({ story, format, h }: { story: CardStory; format: "feed" | "s
   const week = Number(/-(\d+)$/.exec(story.chart_week ?? "")?.[1] ?? 0);
   return (
     <div className={`sc cc cc-${format}`} id="card" style={{ height: h }}>
-      <Sun className="cc-sun" />
       <div className="cc-in">
         <div className="cc-top">
           <span className="sc-logo" dir="ltr">
-            <Mark size={70} ink="#fff" />
-            <span>kur<i>ean</i></span>
+            <Logo size={56} />
           </span>
           <span className="cc-chip">ڕیزبەندیی هەفتە</span>
         </div>
@@ -92,16 +90,12 @@ export function SocialCard({ story, format, full = false }: { story: CardStory; 
             <img src={story.image_url} alt="" />
           ) : (
             <div className="sc-branded" style={{ background: meta.colour }}>
-              <Sun className="sc-sun" />
             </div>
           )}
         </div>
         <div className="sc-top">
           <span className="sc-logo" dir="ltr">
-            <Mark size={78} ink="#fff" />
-            <span>
-              kur<i>ean</i>
-            </span>
+            <Logo size={56} />
           </span>
           <span className="sc-chip glass">{meta.label}</span>
         </div>

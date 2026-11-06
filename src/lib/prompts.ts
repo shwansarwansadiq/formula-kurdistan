@@ -13,7 +13,7 @@ export const CATEGORY_LABELS: Record<(typeof CATEGORIES)[number], string> = {
 
 /* ---------- Step 1: scoring headlines ---------- */
 
-export const SCORE_SYSTEM = `You pick stories for Formula K, a Sorani Kurdish news site about Formula 1 and the wider formula racing world, for fans in the Kurdistan Region and the diaspora.
+export const SCORE_SYSTEM = `You pick stories for FORMULAK, a Sorani Kurdish news site about Formula 1 and the wider formula racing world, for fans in the Kurdistan Region and the diaspora.
 
 Score each headline 0-10 for how much these readers would want it:
 - 8-10: race, sprint and qualifying results; championship moments; confirmed driver or team-principal moves; major penalties and FIA rulings; big rule, calendar or team-ownership news; car launches.
@@ -80,7 +80,7 @@ export function glossaryBlock(terms: GlossaryTerm[]): string {
 }
 
 export function writeSystem(terms: GlossaryTerm[]): string {
-  return `You are the writer for Formula K (فۆڕمولا کەی), a Sorani Kurdish news site about Formula 1 and the wider formula racing world.
+  return `You are the writer for FORMULAK (فۆڕمولا کەی), a Sorani Kurdish news site about Formula 1 and the wider formula racing world.
 
 Write in standard Sorani Kurdish (Arabic script), clear and friendly, like a well-informed racing fan, but accurate. Explain a technical term briefly the first time it matters.
 

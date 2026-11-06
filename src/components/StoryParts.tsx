@@ -3,7 +3,6 @@ import Link from "next/link";
 import { CATEGORY_META, ku, readingMinutes, type Story } from "@/lib/site";
 import { Bidi } from "./Bidi";
 import { Clocks } from "./Clocks";
-import { Sun } from "./Logo";
 
 export const storyHref = (s: Pick<Story, "id">) => `/news/${s.id}`;
 
@@ -26,7 +25,6 @@ export function Photo({ story, priority = false, className = "" }: { story: Stor
   }
   return (
     <div className={`photo branded ${className}`} style={{ background: meta.colour }} aria-hidden="true">
-      <Sun className="branded-sun" />
       <b>
         <Bidi text={story.card_headline} />
       </b>
@@ -63,7 +61,6 @@ export function Tracklist({ stories, start = 1 }: { stories: Story[]; start?: nu
               <img className="thumb" src={s.image_url} alt="" loading="lazy" decoding="async" />
             ) : (
               <span className="thumb branded" style={{ background: CATEGORY_META[s.category].colour }}>
-                <Sun />
               </span>
             )}
             <span className="d">{ku(readingMinutes(s.body))} خولەک</span>
@@ -90,7 +87,7 @@ export async function SiteFooter() {
       </div>
       <p className="disclaimer" style={{ fontSize: 12, opacity: 0.75, padding: "12px 18px 20px", margin: 0 }}>
         فۆڕمولا کەی ماڵپەڕێکی سەربەخۆیە و پەیوەندی بە کۆمپانیاکانی فۆڕمولا ١ و FIA ەوە نییە.{" "}
-        <bdi className="lat">Formula K is an independent news site and is not associated with the Formula 1 companies or the FIA. F1 and FORMULA 1 are trademarks of Formula One Licensing B.V.</bdi>
+        <bdi className="lat">FORMULAK is an independent news site and is not associated with the Formula 1 companies or the FIA. F1 and FORMULA 1 are trademarks of Formula One Licensing B.V.</bdi>
       </p>
     </footer>
   );

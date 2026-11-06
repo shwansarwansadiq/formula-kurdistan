@@ -2,7 +2,7 @@
  * The daily Instagram round-up (Shwan, 6 Nov): instead of one feed photo per story, at 21:00 Hawler the day's
  * published news goes out as
  *   1. one carousel (1080×1350): a cover listing the headlines, one slide per story (its feed card), an end slide;
- *   2. one video (9:16, Formula K's own music) of the same stories, as a Reel;
+ *   2. one video (9:16, FORMULAK's own music) of the same stories, as a Reel;
  * and each also as an Instagram story (the cover image, then the video).
  * Only stories Shwan published that day with Instagram ticked are in it (nothing new is ever published by it).
  * The 5-minute publish job keeps today's row in `roundups` up to date until 21:00 (so the video is made in advance),

@@ -1,5 +1,5 @@
 /**
- * The weekly chart news: when a new Circle Chart week is stored, Formula K writes a Sorani story about the top 10
+ * The weekly chart news: when a new Circle Chart week is stored, FORMULAK writes a Sorani story about the top 10
  * and prepares top-10 feed and story cards. It waits in /admin as a pending story like any other: nothing is
  * published without Shwan's approval. Publishing posts the article, the feed post and the story.
  */
@@ -55,7 +55,7 @@ This story is the WEEKLY CHART ROUNDUP, not a news report from a site:
   Call it ڕیزبەندی, never چارت.
 - Body (120-220 words): who is number one and whether it held or took the spot, the notable climbs, falls and new
   entries in the top 10, then one line on the rest of the top 100 if the facts give one. End by inviting readers to
-  play the whole top 100 on Formula K (لە فۆڕمولا کەی هەموو ١٠٠ گۆرانییەکە ببینە و بیکەرەوە).
+  play the whole top 100 on FORMULAK (لە فۆڕمولا کەی هەموو ١٠٠ گۆرانییەکە ببینە و بیکەرەوە).
 - Use only the facts given. No streaming numbers, no chart history, no reasons for a song's success: none are given.
 - Song titles: use the Latin title given, in «» quotes. Never translate song titles.
 - key_points: three short lines about the top 10.

@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 /**
- * Formula K's own analytics: page views, active reading time and scroll depth, sent to /api/t.
+ * FORMULAK's own analytics: page views, active reading time and scroll depth, sent to /api/t.
  * No cookies. A random visitor ID is kept in the browser only after the reader agrees.
  */
 const KEY = "formulak_consent";

@@ -4,12 +4,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FORMULAK_SITE_URL ?? "https://formulak.news"),
-  title: "فۆڕمولا کەی · هەواڵی فۆڕمولا ١ بە کوردی",
+  title: "FORMULAK · هەواڵی فۆڕمولا ١ بە کوردی",
   description: "هەواڵی فۆڕمولا ١ و جیهانی پێشبڕکێی فۆڕمولا بە کوردیی سۆرانی، هەموو ڕۆژێک، لەگەڵ سەرچاوەکانی.",
-  openGraph: { siteName: "FORMULA K", locale: "ckb_IQ", type: "website" },
+  openGraph: { siteName: "FORMULAK", locale: "ckb_IQ", type: "website" },
 };
 
-export const viewport: Viewport = { themeColor: "#FFF2F7", width: "device-width", initialScale: 1, viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: "#FFFFFF", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- one shared stylesheet for every route */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Inter:wght@400;500;600;700;800&family=Noto+Kufi+Arabic:wght@400;500;700;800;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Kufi+Arabic:wght@400;500;700;800;900&display=swap"
         />
       </head>
       <body>

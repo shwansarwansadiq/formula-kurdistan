@@ -1,4 +1,4 @@
--- Starting sources (from the Formula K plan). Trust: 3 high, 2 medium.
+-- Starting sources (from the FORMULAK plan). Trust: 3 high, 2 medium.
 insert into sources (name, feed_url, site_url, category_hint, trust) values
   ('FIA press releases', 'https://www.fia.com/rss/press-release', 'https://www.fia.com', 'mixed', 3),
   ('Formula1.com', 'https://www.formula1.com/en/latest/all.xml', 'https://www.formula1.com', 'mixed', 3),

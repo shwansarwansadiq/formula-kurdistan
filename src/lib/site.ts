@@ -6,7 +6,7 @@ export const CATEGORY_META = {
   f1_teams: { slug: "teams-drivers", label: "تیم و شۆفێران", colour: "var(--lilac)", ink: "#fff", en: "Teams & drivers" },
   f1_tech: { slug: "tech-rules", label: "تەکنیک و یاسا", colour: "var(--mint)", ink: "#fff", en: "Tech & rules" },
   f1_business: { slug: "business", label: "بازرگانی", colour: "var(--blue)", ink: "#fff", en: "Business" },
-  other_series: { slug: "other-series", label: "خولەکانی تر", colour: "var(--gold)", ink: "#111", en: "Other series" },
+  other_series: { slug: "other-series", label: "خولەکانی تر", colour: "var(--gold)", ink: "#0a0a0a", en: "Other series" },
 } as const;
 
 export type CategoryKey = keyof typeof CATEGORY_META;

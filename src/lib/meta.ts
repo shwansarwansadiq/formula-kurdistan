@@ -1,6 +1,6 @@
 /**
- * Posting to the formulak Facebook Page and @formulak.news through the FORMULA K Meta app.
- * META_TOKEN is the formulak-publisher system user's token (Formula K business portfolio, Page "Content" only).
+ * Posting to the formulak Facebook Page and @formulak.news through the FORMULAK Meta app.
+ * META_TOKEN is the formulak-publisher system user's token (FORMULAK business portfolio, Page "Content" only).
  */
 const GRAPH = "https://graph.facebook.com/v23.0";
 export const FORMULAK_PAGE_ID = process.env.META_PAGE_ID ?? "";

@@ -1,4 +1,4 @@
-/* Formula K's brand for video: colours, fonts (self-hosted, so renders never depend on a font server), the mark and the sun. */
+/* FORMULAK's brand for video: colours, fonts (self-hosted, so renders never depend on a font server), the mark and the sun. */
 import "@fontsource/noto-kufi-arabic/500.css";
 import "@fontsource/noto-kufi-arabic/700.css";
 import "@fontsource/noto-kufi-arabic/800.css";
@@ -6,18 +6,17 @@ import "@fontsource/noto-kufi-arabic/900.css";
 import "@fontsource/inter/500.css";
 import "@fontsource/inter/700.css";
 import "@fontsource/inter/800.css";
-import "@fontsource/baloo-2/800.css";
 import { interpolate, spring, useCurrentFrame, useVideoConfig, Easing } from "remotion";
-import { HAND, RAYS } from "../../src/components/Logo";
+import { FORMULA_PATH, K_IN_WORD_PATH, K_PATH, LOGO_HEIGHT, LOGO_WIDTH } from "../../src/components/logo-paths";
 
 export const C = {
   berry: "#E10600",
-  berryDeep: "#A80500",
-  plum: "#111318",
-  blush: "#F4F4F2",
-  gold: "#F2B705",
-  lilac: "#6D7480",
-  mist: "#E8EAED",
+  berryDeep: "#B00500",
+  plum: "#0A0A0A",
+  blush: "#FFFFFF",
+  gold: "#8A8A8A",
+  lilac: "#171717",
+  mist: "#F2F2F2",
   mint: "#3FA88E",
   blue: "#3A5BD9",
 };
@@ -63,55 +62,29 @@ export function tokens(text: string): { t: string; latin: boolean }[] {
   return out;
 }
 
-/** The finger-heart mark, drawn in from `start`: the hand's strokes, then the 21 rays, then the heart. */
-export function Mark({ size, start, ink = "#fff" }: { size: number; start: number; ink?: string }) {
-  const f = useCurrentFrame();
-  const draw = (i: number) => interpolate(f, [start + i * 2, start + i * 2 + 16], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: easeOut });
-  const ray = (i: number) => interpolate(f, [start + 18 + i * 0.8, start + 26 + i * 0.8], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: easeOut });
-  const heart = spring({ frame: f - (start + 30), fps: 30, config: { damping: 9, stiffness: 160 } });
+/** The custom K, sliding in from `start`. `size` is its width. */
+export function Mark({ size, start, ink = C.berry }: { size: number; start: number; ink?: string }) {
+  const t = useT(start, 14);
   return (
-    <svg viewBox="-50 -50 100 100" width={size} height={size}>
-      <g transform="translate(-30.7 -11) scale(0.105)" fill="none" stroke={ink} strokeWidth="23" strokeLinecap="round" strokeLinejoin="round">
-        {HAND.map((d, i) => (
-          <path key={i} d={d} pathLength={1} strokeDasharray="1" strokeDashoffset={draw(i)} />
-        ))}
-        <ellipse cx="170" cy="56" rx="19" ry="12" transform="rotate(32 170 56)" pathLength={1} strokeDasharray="1" strokeDashoffset={draw(9)} />
-      </g>
-      <g stroke={C.gold} strokeWidth="2.2" strokeLinecap="round">
-        {RAYS.map((i) => (
-          <g key={i} transform={`rotate(${((i * 360) / 21).toFixed(3)} -2.5 -30.5)`}>
-            <line x1="-2.5" y1="-40" x2="-2.5" y2="-45.5" opacity={ray(i)} transform={`translate(0 ${(1 - ray(i)) * 4})`} />
-          </g>
-        ))}
-      </g>
-      <g transform={`translate(-2.5 -30.5) scale(${1.3 * heart})`}>
-        <path d="M0 3.6 C -5 0.5 -5.4 -2.8 -3.2 -4 C -1.6 -4.8 -0.4 -4 0 -2.8 C 0.4 -4 1.6 -4.8 3.2 -4 C 5.4 -2.8 5 0.5 0 3.6 Z" fill={C.berry} />
-      </g>
+    <svg viewBox="0 -700 1000 700" width={size} height={size * 0.7} style={{ opacity: t, transform: `translateX(${(t - 1) * 40}px)` }}>
+      <path fillRule="evenodd" d={K_PATH} fill={ink} />
     </svg>
   );
 }
 
-/** The 21-ray Kurdish sun; `grow` 0→1 extends the rays, `turn` rotates it in degrees. */
-export function Sun({ size, grow = 1, turn = 0, ray = C.gold, core = C.gold, coreOpacity = 1 }: { size: number; grow?: number; turn?: number; ray?: string; core?: string; coreOpacity?: number }) {
-  return (
-    <svg viewBox="-100 -100 200 200" width={size} height={size} style={{ transform: `rotate(${turn}deg)` }}>
-      <circle r={44 * (0.6 + 0.4 * grow)} fill={core} opacity={coreOpacity} />
-      <g stroke={ray} strokeWidth="9" strokeLinecap="round">
-        {RAYS.map((i) => {
-          const a = (i * 2 * Math.PI) / 21;
-          const r2 = 58 + 38 * grow;
-          return <line key={i} x1={(Math.sin(a) * 58).toFixed(1)} y1={(-Math.cos(a) * 58).toFixed(1)} x2={(Math.sin(a) * r2).toFixed(1)} y2={(-Math.cos(a) * r2).toFixed(1)} opacity={grow} />;
-        })}
-      </g>
-    </svg>
-  );
+/** Kept so existing compositions compile: FORMULAK uses no sun graphic. */
+export function Sun(_: { size: number; grow?: number; turn?: number; ray?: string; core?: string; coreOpacity?: number }) {
+  return null;
 }
 
+/** The FORMULAK wordmark. `size` is roughly the old type size; its height is 0.7 of that. */
 export function Wordmark({ size }: { size: number }) {
+  const h = size * 0.7;
   return (
-    <span dir="ltr" style={{ font: `800 ${size}px/1 ${WORD}`, color: "#fff", letterSpacing: "-0.01em" }}>
-      kur<span style={{ color: C.berry }}>ean</span>
-    </span>
+    <svg viewBox={`0 -700 ${LOGO_WIDTH} ${LOGO_HEIGHT}`} height={h} width={(h * LOGO_WIDTH) / LOGO_HEIGHT} aria-label="FORMULAK">
+      <path fillRule="evenodd" d={FORMULA_PATH} fill="#fff" />
+      <path fillRule="evenodd" d={K_IN_WORD_PATH} fill={C.berry} />
+    </svg>
   );
 }
 
@@ -130,8 +103,7 @@ export function EndCard({ start }: { start: number }) {
         <Sun size={1600} grow={sunGrow} turn={(f - start) * 0.25} core={C.berry} />
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }} dir="ltr">
-        <Mark size={220} start={start + 8} />
-        <span style={{ opacity: word }}>
+                <span style={{ opacity: word }}>
           <Wordmark size={140} />
         </span>
       </div>

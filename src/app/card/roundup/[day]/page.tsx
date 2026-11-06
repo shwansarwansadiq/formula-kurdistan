@@ -21,7 +21,7 @@ export default async function RoundupSlide({ params, searchParams }: { params: P
   }
   return (
     <main className="card-page">
-      <style>{`html{direction:ltr}html,body{margin:0;background:#2a1e3b}.skip{display:none}.card-page{width:1080px;direction:rtl}.sc *{animation:none!important}`}</style>
+      <style>{`html{direction:ltr}html,body{margin:0;background:#0A0A0A}.skip{display:none}.card-page{width:1080px;direction:rtl}.sc *{animation:none!important}`}</style>
       {body}
     </main>
   );

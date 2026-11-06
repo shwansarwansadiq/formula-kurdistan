@@ -30,7 +30,7 @@ export async function isVideoWorker(req: Request, audience = "https://formulak.n
   }
 }
 
-const HEX: Record<CategoryKey, string> = { f1_race: "#E10600", f1_teams: "#6D7480", f1_tech: "#00A19B", f1_business: "#2F5BEA", other_series: "#F2B705" };
+const HEX: Record<CategoryKey, string> = { f1_race: "#E10600", f1_teams: "#171717", f1_tech: "#5C5C5C", f1_business: "#0A0A0A", other_series: "#8A8A8A" };
 
 type Row = {
   id: number;

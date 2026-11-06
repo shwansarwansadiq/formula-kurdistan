@@ -61,7 +61,7 @@ export function Bars({ rows, digits, format = compact }: { rows: { label: string
   );
 }
 
-const PALETTE = ["#E8508A", "#9B7BEA", "#3FA88E", "#3A5BD9", "#FFB938", "#2A1E3B", "#B8A6EE", "#8C7A9C"];
+const PALETTE = ["#E10600", "#171717", "#3FA88E", "#3A5BD9", "#8A8A8A", "#0A0A0A", "#B8A6EE", "#8C7A9C"];
 
 /** Donut with a legend that carries the numbers (colour is never the only cue). */
 export function Donut({ rows, digits }: { rows: { label: string; value: number; color?: string }[]; digits: Digits }) {
@@ -116,7 +116,7 @@ export function Heatmap({ cells, days, digits }: { cells: { dow: number; hour: n
               {Array.from({ length: 24 }, (_, h) => {
                 const v = at(d, h);
                 return (
-                  <td key={h} title={`${days[d]} ${h}:00 — ${exact(v, digits)}`} style={{ background: v ? `rgb(232 80 138 / ${0.12 + (0.88 * v) / max})` : undefined }} />
+                  <td key={h} title={`${days[d]} ${h}:00 — ${exact(v, digits)}`} style={{ background: v ? `rgb(225 6 0 / ${0.12 + (0.88 * v) / max})` : undefined }} />
                 );
               })}
             </tr>

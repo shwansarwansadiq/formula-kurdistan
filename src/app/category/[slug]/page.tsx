@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Sun } from "@/components/Logo";
 import { Masthead } from "@/components/Masthead";
 import { SiteFooter, Tracklist } from "@/components/StoryParts";
 import { categoryFromSlug, CATEGORY_META, issueNumber, ku, publishedStories } from "@/lib/site";
@@ -23,7 +22,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       <Masthead issue={issue} active={key} />
       <main id="main" data-category={key}>
         <section className="cat-head field" style={{ background: meta.colour }}>
-          <Sun className="field-sun" />
           <h1>{meta.label}</h1>
           <p>{stories.length ? `${ku(stories.length)} هەواڵ` : "هێشتا هەواڵ لەم بەشەدا نییە."}</p>
         </section>

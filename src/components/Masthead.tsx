@@ -7,7 +7,7 @@ export function Masthead({ issue, active, note }: { issue?: number; active?: Cat
     <header className="mast">
       <div className="mast-row">
         <Link href="/" className="mast-home" aria-label="فۆڕمولا کەی، سەرەتا">
-          <Logo animated />
+          <Logo size={24} />
         </Link>
         <div className="issue">
           {issue ? <strong>ژمارە {ku(String(issue).padStart(3, "0"))}</strong> : null}

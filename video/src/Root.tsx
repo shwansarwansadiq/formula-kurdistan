@@ -10,7 +10,7 @@ const sampleNews: NewsProps = {
   points: ["تیزەری یەکەم ئەمڕۆ بڵاوکرایەوە.", "پەخشی یەکەم: چوارشەممە ٢٥ی تشرینی دووەم.", "٩ی شەو لە کۆریا، ٣ی پاشنیوەڕۆ لە هەولێر."],
   image: "test.jpg",
   label: "دراما و فیلم",
-  colour: "#9B7BEA",
+  colour: "#171717",
 };
 
 const sampleChart: ChartProps = {
@@ -41,8 +41,8 @@ const sampleScenery: SceneryProps = {
 const sampleRoundup: RoundupProps = {
   dateLabel: "هەینی ٦ی تشرینی دووەم",
   items: [
-    { headline: sampleNews.headline, image: "test.jpg", label: "دراما و فیلم", colour: "#9B7BEA" },
-    { headline: "دینۆی SEVENTEEN بە سینگڵێکی لەناکاو دێتەوە", image: null, label: "کەی-پۆپ", colour: "#E8508A" },
+    { headline: sampleNews.headline, image: "test.jpg", label: "دراما و فیلم", colour: "#171717" },
+    { headline: "دینۆی SEVENTEEN بە سینگڵێکی لەناکاو دێتەوە", image: null, label: "کەی-پۆپ", colour: "#E10600" },
     { headline: "فێستیڤاڵی گەڵا سوورەکانی سیئۆڵ دەستی پێکرد", image: "test.jpg", label: "کولتوور", colour: "#3FA88E" },
   ],
   music: "seoul-night",

@@ -6,7 +6,7 @@
  *   Access tokens last 24 h and are refreshed with the refresh token (valid 365 days).
  * - TikTok allows at most 5 waiting drafts per 24 h, and 6 requests a minute per token: the 5-minute publish job sends
  *   one draft per run, never more than DRAFTS_PER_DAY in 24 hours, oldest story first.
- * Env: TIKTOK_CLIENT_KEY, TIKTOK_CLIENT_SECRET (the FORMULA K app on developers.tiktok.com).
+ * Env: TIKTOK_CLIENT_KEY, TIKTOK_CLIENT_SECRET (the FORMULAK app on developers.tiktok.com).
  */
 import { db } from "./db";
 import { readyVideo } from "./video";

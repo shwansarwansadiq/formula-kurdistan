@@ -1,5 +1,5 @@
 /**
- * Where fans can listen to each chart song: the official YouTube video (played inside Formula K with YouTube's own
+ * Where fans can listen to each chart song: the official YouTube video (played inside FORMULAK with YouTube's own
  * embedded player) and the Spotify track (a link out). We never host or copy any audio.
  * - YouTube: Data API v3 (YOUTUBE_API_KEY). A search costs 100 of the 10,000 daily quota units, so at most
  *   SEARCHES_PER_RUN songs are searched a day; stored videos are re-checked every 30 days (1 unit per 50 videos),

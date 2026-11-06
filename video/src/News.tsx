@@ -49,7 +49,7 @@ function Point({ text, index, start }: { text: string; index: number; start: num
         gap: 30,
         opacity: Math.min(1, s * 1.4),
         transform: `translateX(${(1 - s) * 140}px)`,
-        background: "rgba(42,30,59,0.78)",
+        background: "rgba(10,10,10,0.78)",
         border: "2px solid rgba(255,255,255,0.18)",
         borderRadius: 40,
         padding: "34px 40px",
@@ -91,14 +91,13 @@ export function News({ headline, points, image, label, colour }: NewsProps) {
           </AbsoluteFill>
         )}
       </AbsoluteFill>
-      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(42,30,59,0.55) 0%, rgba(42,30,59,0) 26%, rgba(42,30,59,0) 45%, rgba(42,30,59,0.85) 100%)" }} />
+      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0) 26%, rgba(10,10,10,0) 45%, rgba(10,10,10,0.85) 100%)" }} />
       <AbsoluteFill style={{ background: C.plum, opacity: shade }} />
 
       {/* Top: logo and category */}
       <div style={{ position: "absolute", top: SAFE.top, left: SAFE.left, right: SAFE.right, display: "flex", justifyContent: "space-between", alignItems: "center", opacity: top, transform: `translateY(${(1 - top) * -60}px)` }}>
         <span style={{ font: `800 40px/1 ${SORANI}`, color: "#fff", background: colour, padding: "22px 34px 26px", borderRadius: 999, border: "2px solid rgba(255,255,255,0.4)" }}>{label}</span>
         <span dir="ltr" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <Mark size={92} start={10} />
           <Wordmark size={74} />
         </span>
       </div>
@@ -112,7 +111,7 @@ export function News({ headline, points, image, label, colour }: NewsProps) {
           bottom: SAFE.bottom,
           padding: "52px 56px 56px",
           borderRadius: 56,
-          background: "rgba(42,30,59,0.62)",
+          background: "rgba(10,10,10,0.62)",
           border: "2px solid rgba(255,255,255,0.22)",
           opacity: panel * (1 - toPoints),
           transform: `translateY(${(1 - panel) * 200 - toPoints * 80}px)`,
