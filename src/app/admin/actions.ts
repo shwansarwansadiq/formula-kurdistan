@@ -383,3 +383,28 @@ export async function makeResult(form: FormData) {
   if (session) await makeLatestRaceCard(session);
   revalidatePath("/admin/results");
 }
+
+
+/** Driver photo library: Shwan adds this season's racing-suit photo for a driver, with its credit. */
+export async function saveDriverPhoto(form: FormData) {
+  await requireAdmin();
+  const driver = String(form.get("driver") ?? "");
+  const season = String(form.get("season") ?? "");
+  const credit = String(form.get("credit") ?? "").trim().slice(0, 120);
+  const file = form.get("file");
+  if (!/^[a-z0-9_-]{1,64}$/.test(driver) || !/^\d{4}$/.test(season) || !credit || !(file instanceof File) || !file.size) return;
+  const type = file.type;
+  if (!/^image\/(jpeg|png|webp)$/.test(type)) return;
+  const path = `drivers/${season}-${driver}-${Date.now().toString(36)}.${type.split("/")[1].replace("jpeg", "jpg")}`;
+  const { error } = await db().storage.from("story-images").upload(path, new Uint8Array(await file.arrayBuffer()), { contentType: type, upsert: true });
+  if (error) return;
+  const url = db().storage.from("story-images").getPublicUrl(path).data.publicUrl;
+  await db().from("driver_photos").upsert({ season, driver_id: driver, url, credit, updated_at: new Date().toISOString() });
+  revalidatePath("/admin/drivers");
+}
+
+export async function removeDriverPhoto(form: FormData) {
+  await requireAdmin();
+  await db().from("driver_photos").delete().eq("season", String(form.get("season") ?? "")).eq("driver_id", String(form.get("driver") ?? ""));
+  revalidatePath("/admin/drivers");
+}

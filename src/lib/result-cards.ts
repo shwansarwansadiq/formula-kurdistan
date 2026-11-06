@@ -54,15 +54,15 @@ const SESSION_KEY: Record<ResultSession, SessionKey> = { Qualifying: "Qualifying
 const FROM_MS = 45 * 60_000;
 const UNTIL_MS = 3 * 86_400_000;
 
-type Row = Omit<Podium, "photo" | "credit"> & { wiki: string | null };
+type Row = Omit<Podium, "photo" | "credit"> & { wiki: string | null; driverId: string };
 
 async function podium(race: Race, session: ResultSession): Promise<Row[]> {
   if (session === "Qualifying") {
     const rows = await getQualifying(race.round);
-    return rows.slice(0, 3).map((r) => ({ pos: r.position, name: r.driver.family, given: r.driver.given, code: r.driver.code, team: r.team.name, time: r.q3 ?? r.q2 ?? r.q1 ?? "", wiki: r.driver.wiki }));
+    return rows.slice(0, 3).map((r) => ({ pos: r.position, name: r.driver.family, given: r.driver.given, code: r.driver.code, team: r.team.name, time: r.q3 ?? r.q2 ?? r.q1 ?? "", wiki: r.driver.wiki, driverId: r.driver.id }));
   }
   const rows = session === "Sprint" ? await getSprint(race.round) : await getRaceResults(race.round);
-  return rows.slice(0, 3).map((r) => ({ pos: r.positionText, name: r.driver.family, given: r.driver.given, code: r.driver.code, team: r.team.name, time: r.time ?? r.status ?? "", wiki: r.driver.wiki }));
+  return rows.slice(0, 3).map((r) => ({ pos: r.positionText, name: r.driver.family, given: r.driver.given, code: r.driver.code, team: r.team.name, time: r.time ?? r.status ?? "", wiki: r.driver.wiki, driverId: r.driver.id }));
 }
 
 /** Sessions of the current calendar whose results may be in now. */
@@ -88,7 +88,7 @@ export async function makeResultCard(race: Race, session: ResultSession, iso: st
   if (rows.length < 3) return null;
   const top: Podium[] = [];
   for (const r of rows) {
-    const photo = await driverPhoto(`${r.given} ${r.name}`, race.season);
+    const photo = await driverPhoto(`${r.given} ${r.name}`, race.season, r.driverId);
     top.push({ pos: r.pos, name: r.name, given: r.given, code: r.code, team: r.team, time: r.time, photo: photo?.url ?? null, credit: photo?.credit ?? null });
   }
   const shape = race.lat !== null && race.lng !== null ? circuitNear(race.lat, race.lng) : null;

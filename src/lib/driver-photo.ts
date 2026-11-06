@@ -2,6 +2,7 @@
    suit, free licence only (Wikimedia Commons), credited. Official F1 profile photos are not free to use, so they
    are never taken. A small vision check confirms the racing suit; with no match the card shows the K instead. */
 import { unstable_cache } from "next/cache";
+import { db } from "./db";
 import { ai, SCORE_MODEL } from "./writer";
 
 export type DriverPhoto = { url: string; credit: string };
@@ -13,8 +14,19 @@ const strip = (html: string) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " "
 type Candidate = { title: string; url: string; credit: string };
 
 export async function candidates(name: string, season: string): Promise<Candidate[]> {
-  // Family name only: many files are titled "… 2026 Nr. 12 Antonelli" without the full name.
-  const q = `"${name.split(" ").at(-1)}" ${season} filetype:bitmap`;
+  // Full name, then family name only (many files are titled "… 2026 Nr. 12 Antonelli").
+  const seen = new Set<string>();
+  const out: Candidate[] = [];
+  for (const q of [`"${name}" ${season} filetype:bitmap`, `"${name.split(" ").at(-1)}" ${season} filetype:bitmap`])
+    for (const c of await search(q, name, season)) {
+      if (seen.has(c.title)) continue;
+      seen.add(c.title);
+      out.push(c);
+    }
+  return out;
+}
+
+async function search(q: string, name: string, season: string): Promise<Candidate[]> {
   const j = await fetch(
     `https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=60&gsrsearch=${encodeURIComponent(q)}&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=900`,
     { headers: UA, signal: AbortSignal.timeout(12_000) },
@@ -81,11 +93,21 @@ async function lookup(name: string, season: string): Promise<DriverPhoto | null>
   return null;
 }
 
-/** Cached for a week per driver and season; null when no photo meets the rule. */
-export async function driverPhoto(name: string, season: string): Promise<DriverPhoto | null> {
+/** Shwan's chosen photo for this driver and season, if he added one in /admin/drivers. */
+export async function chosenPhoto(driverId: string, season: string): Promise<DriverPhoto | null> {
+  const { data } = await db().from("driver_photos").select("url, credit").eq("season", season).eq("driver_id", driverId).maybeSingle();
+  return data ? { url: data.url, credit: data.credit } : null;
+}
+
+/** Shwan's chosen photo first; otherwise a free photo that passes the rule (cached a week); null shows the K. */
+export async function driverPhoto(name: string, season: string, driverId?: string): Promise<DriverPhoto | null> {
   if (!name.trim() || !/^\d{4}$/.test(season)) return null;
+  if (driverId) {
+    const chosen = await chosenPhoto(driverId, season).catch(() => null);
+    if (chosen) return chosen;
+  }
   try {
-    return await unstable_cache(() => lookup(name, season), ["driver-photo-v6", name, season], { revalidate: 7 * 86400 })();
+    return await unstable_cache(() => lookup(name, season), ["driver-photo-v7", name, season], { revalidate: 7 * 86400 })();
   } catch {
     return null;
   }

@@ -7,6 +7,7 @@ import { ku } from "@/lib/site";
 const TABS = [
   { href: "/admin", key: "pending", label: "چاوەڕوان" },
   { href: "/admin/results", key: "results", label: "ئەنجامەکان" },
+  { href: "/admin/drivers", key: "drivers", label: "وێنەی شۆفێران" },
   { href: "/admin/scheduled", key: "scheduled", label: "خشتە" },
   { href: "/admin/published", key: "published", label: "بڵاوکراوە" },
   { href: "/admin/analytics", key: "analytics", label: "شیکاری" },

@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // Headless Chromium for rendering social cards; must stay outside the bundle.
+  // Driver photo uploads in /admin/drivers (Vercel accepts up to 4.5 MB per request).
+  experimental: { serverActions: { bodySizeLimit: "4mb" } },
   serverExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
   // Ship Chromium's compressed binary only with the functions that render cards.
   outputFileTracingIncludes: {
