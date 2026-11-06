@@ -81,19 +81,25 @@ export async function getDriverSeason(id: string) {
   const mr = await read(`current/drivers/${id}/results.json`, 30 * MIN);
   return mr ? parseDriverSeason(mr) : [];
 }
-export async function getDriverHistory(id: string) {
+/** The last ten seasons, one request at a time: the source has no all-seasons standings and limits request rates. */
+async function history(kind: "driver" | "team", id: string) {
   if (!safeId(id)) return [];
-  const mr = await read(`drivers/${id}/driverStandings.json`, 6 * HOUR);
-  return mr ? parseHistory(mr, "driver") : [];
+  const [base, file] = kind === "driver" ? [`drivers/${id}`, "driverStandings"] : [`constructors/${id}`, "constructorStandings"];
+  const list = await read(`${base}/seasons.json`, 24 * HOUR);
+  const seasons: { season?: string }[] = (list as { SeasonTable?: { Seasons?: { season?: string }[] } } | null)?.SeasonTable?.Seasons ?? [];
+  const years = seasons.map((s) => String(s.season)).filter((y) => /^\d{4}$/.test(y)).sort().reverse().slice(0, 10);
+  const rows = [];
+  for (const y of years) {
+    const mr = await read(`${y}/${base}/${file}.json`, 6 * HOUR);
+    if (mr) rows.push(...parseHistory(mr, kind));
+  }
+  return rows;
 }
+export const getDriverHistory = (id: string) => history("driver", id);
 export async function getTeam(id: string) {
   if (!safeId(id)) return null;
   const mr = await read(`constructors/${id}.json`, 24 * HOUR);
   const c = (mr as { ConstructorTable?: { Constructors?: Record<string, unknown>[] } } | null)?.ConstructorTable?.Constructors?.[0];
   return c ? teamRef(c) : null;
 }
-export async function getTeamHistory(id: string) {
-  if (!safeId(id)) return [];
-  const mr = await read(`constructors/${id}/constructorStandings.json`, 6 * HOUR);
-  return mr ? parseHistory(mr, "team") : [];
-}
+export const getTeamHistory = (id: string) => history("team", id);

@@ -134,6 +134,7 @@ export function F1_FIXTURE(path: string): Record<string, unknown> {
     return { RaceTable: { Races: SAMPLE_RACES.slice(0, 2).map((r) => ({ ...r, Results: [sampleResults[0]] })) } };
   if (/^current\/\d+\/results/.test(path)) return { RaceTable: { Races: path.includes("/19/") || path.includes("/18/") ? [{ Results: sampleResults }] : [] } };
   if (/^current\/\d+\/qualifying/.test(path)) return { RaceTable: { Races: path.includes("/19/") ? [{ QualifyingResults: sampleResults.map((r) => ({ position: r.position, Driver: r.Driver, Constructor: r.Constructor, Q1: "1:17.402", Q2: "1:16.988", Q3: "1:16.514" })) }] : [] } };
+  if (path.endsWith("seasons.json")) return { SeasonTable: { Seasons: [{ season: "2025" }, { season: "2026" }] } };
   const driver = path.match(/drivers\/([^/.]+)/)?.[1];
   const row = SAMPLE_DRIVERS.find((d) => d[0] === driver);
   if (driver && path.endsWith("results.json")) return { RaceTable: { Races: row ? SAMPLE_RACES.slice(0, 2).map((r) => ({ ...r, Results: [sampleResults[0]] })) : [] } };
