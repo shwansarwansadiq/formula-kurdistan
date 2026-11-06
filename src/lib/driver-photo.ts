@@ -5,7 +5,7 @@ import { unstable_cache } from "next/cache";
 export type DriverPhoto = { url: string; credit: string };
 
 const UA = { "User-Agent": "FORMULAK/1.0 (https://formulak.news)" };
-const FREE = /^(cc[ -]?by|cc0|public domain|pd\b)/i;
+const FREE = /^(cc[ -]?by|cc0|public domain|pd\b|ogl)/i; // OGL: UK Open Government Licence, free with credit
 
 const strip = (html: string) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 
@@ -37,7 +37,7 @@ async function lookup(wiki: string): Promise<DriverPhoto | null> {
 export async function driverPhoto(wiki: string | null): Promise<DriverPhoto | null> {
   if (!wiki) return null;
   try {
-    return await unstable_cache(() => lookup(wiki), ["driver-photo", wiki], { revalidate: 7 * 86400 })();
+    return await unstable_cache(() => lookup(wiki), ["driver-photo-v2", wiki], { revalidate: 7 * 86400 })();
   } catch {
     return null;
   }
