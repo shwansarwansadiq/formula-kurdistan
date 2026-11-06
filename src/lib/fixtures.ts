@@ -146,3 +146,17 @@ export function F1_FIXTURE(path: string): Record<string, unknown> {
   if (team) return { ConstructorTable: { Constructors: teamRow ? [sampleTeam(teamRow)] : [] } };
   return {};
 }
+
+/** Sample result card for local preview only (not real results). */
+export function sampleResultData() {
+  return {
+    race: { name: "São Paulo Grand Prix", round: 20, season: "2026", circuit: "Autódromo José Carlos Pace", locality: "São Paulo", country: "Brazil", circuitId: "br-1940" },
+    session: "Qualifying" as const,
+    sessionIso: "2026-11-07T18:00:00Z",
+    podium: [
+      { pos: "1", name: "Antonelli", given: "Andrea Kimi", code: "ANT", team: "Mercedes", time: "1:09.811", photo: "/_dev/a.jpg", credit: "Sample (CC BY 4.0)" },
+      { pos: "2", name: "Verstappen", given: "Max", code: "VER", team: "Red Bull", time: "1:09.902", photo: "/_dev/b.jpg", credit: "Sample (CC BY-SA 4.0)" },
+      { pos: "3", name: "Hamilton", given: "Lewis", code: "HAM", team: "Ferrari", time: "1:10.004", photo: null, credit: null },
+    ],
+  };
+}

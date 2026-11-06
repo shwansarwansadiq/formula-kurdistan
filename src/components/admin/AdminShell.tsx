@@ -6,6 +6,7 @@ import { ku } from "@/lib/site";
 
 const TABS = [
   { href: "/admin", key: "pending", label: "چاوەڕوان" },
+  { href: "/admin/results", key: "results", label: "ئەنجامەکان" },
   { href: "/admin/scheduled", key: "scheduled", label: "خشتە" },
   { href: "/admin/published", key: "published", label: "بڵاوکراوە" },
   { href: "/admin/analytics", key: "analytics", label: "شیکاری" },
@@ -37,7 +38,7 @@ export async function AdminShell({ active, title, children }: { active: (typeof 
         </div>
         <nav className="seg" aria-label="داشبۆرد">
           {TABS.map((t) => {
-            const count = t.key === "pending" ? n.pending : t.key === "stickers" ? n.stickers : 0;
+            const count = t.key === "pending" ? n.pending : t.key === "stickers" ? n.stickers : t.key === "results" ? (n.results ?? 0) : 0;
             return (
               <Link key={t.key} href={t.href} className={t.key === active ? "on" : undefined} aria-current={t.key === active ? "page" : undefined}>
                 {t.label}

@@ -19,7 +19,7 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
 | 1. Setup | Accounts in progress; logo, templates and glossary awaiting approval |
 | 2. Engine (collector, scorer, writer, glossary) | Adapted for F1, not yet running |
 | 3. Website and /admin | Public site redesigned (starting-grid world, see DESIGN.md); /admin keeps its working look |
-| 4. Standings, calendar, race pages, driver and team profiles, search, next-session countdown | Built on Jolpica data (src/lib/f1data.ts). Confirm Jolpica terms before ads. Race result card and race-weekend mode not built |
+| 4. Standings, calendar, race pages, driver and team profiles, search, next-session countdown | Built on Jolpica data (src/lib/f1data.ts). Confirm Jolpica terms before ads. Session result cards (Shwan, 6 Nov): qualifying, sprint and race top 3 made by the 5-minute publish job, wait in /admin/results, one tap posts (src/lib/result-cards.ts). Practice skipped (Jolpica has none; OpenF1 needs a commercial licence). Our own GP look: circuit drawing (bacinger/f1-circuits, MIT) and a host colour, never official GP logos. Driver photos: free Wikipedia lead images only, credited. Race-weekend mode not built |
 | 5. Social + video | Videos use the starting-grid design (video/src/News.tsx); Roundup still has its old layout. Facebook + Instagram live: Meta app FORMULAK (1831345977903473), portfolio formulak.news (1772653550421107), system user formulak-publisher (Page Content only), Page 1249287631604754. TikTok app FORMULAK (7704977857198376978) runs on SANDBOX keys; production needs a demo video and review, then swap the keys in Vercel. Videos render every 15 min. Status: /admin/connections |
 
 ## Differences from Kurean

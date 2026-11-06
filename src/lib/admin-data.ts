@@ -84,6 +84,10 @@ export async function counts(): Promise<Record<string, number>> {
     .eq("sticker_done", false)
     .contains("platforms", ["instagram"]);
   out.stickers = count ?? 0;
+  {
+    const { count: results } = await db().from("result_cards").select("id", { count: "exact", head: true }).eq("status", "pending");
+    out.results = results ?? 0;
+  }
   return out;
 }
 

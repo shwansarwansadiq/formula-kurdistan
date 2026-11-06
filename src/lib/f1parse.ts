@@ -10,6 +10,8 @@ export type Race = {
   circuit: string;
   locality: string;
   country: string;
+  lat: number | null;
+  lng: number | null;
   raceIso: string;
   sessions: Session[];
 };
@@ -22,6 +24,7 @@ export type DriverRef = {
   family: string;
   birth: string | null;
   nationality: string | null;
+  wiki: string | null;
 };
 export type TeamRef = { id: string; name: string; nationality: string | null };
 
@@ -65,6 +68,7 @@ export function driverRef(d: Json | undefined): DriverRef {
     family: String(d?.familyName ?? ""),
     birth: str(d?.dateOfBirth),
     nationality: str(d?.nationality),
+    wiki: str(d?.url),
   };
 }
 
@@ -92,6 +96,8 @@ export function parseRace(r: Json): Race | null {
     circuit: String(r?.Circuit?.circuitName ?? ""),
     locality: String(r?.Circuit?.Location?.locality ?? ""),
     country: String(r?.Circuit?.Location?.country ?? ""),
+    lat: Number.isFinite(Number(r?.Circuit?.Location?.lat)) && r?.Circuit?.Location?.lat !== undefined ? Number(r.Circuit.Location.lat) : null,
+    lng: Number.isFinite(Number(r?.Circuit?.Location?.long)) && r?.Circuit?.Location?.long !== undefined ? Number(r.Circuit.Location.long) : null,
     raceIso,
     sessions,
   };

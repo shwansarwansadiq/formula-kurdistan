@@ -360,3 +360,26 @@ export async function remakeVideo(form: FormData) {
   revalidatePath("/admin/published");
   revalidatePath("/admin/tiktok");
 }
+
+
+/** Session result cards: post one to Facebook and Instagram, skip it, or make the latest race's card by hand. */
+export async function postResult(form: FormData) {
+  await requireAdmin();
+  const { postResultCard } = await import("@/lib/result-cards");
+  await postResultCard(idOf(form));
+  revalidatePath("/admin/results");
+}
+
+export async function skipResult(form: FormData) {
+  await requireAdmin();
+  await db().from("result_cards").update({ status: "skipped" }).eq("id", idOf(form)).in("status", ["pending", "failed"]);
+  revalidatePath("/admin/results");
+}
+
+export async function makeResult(form: FormData) {
+  await requireAdmin();
+  const { makeLatestRaceCard, RESULT_SESSIONS } = await import("@/lib/result-cards");
+  const session = RESULT_SESSIONS.find((s) => s === form.get("session"));
+  if (session) await makeLatestRaceCard(session);
+  revalidatePath("/admin/results");
+}
