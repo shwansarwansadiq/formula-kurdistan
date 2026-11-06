@@ -110,7 +110,7 @@ export function SiteFooter() {
           <div className="handles" dir="ltr">
             <a href="https://www.instagram.com/formulak.news" rel="noopener">Instagram</a>
             <a href="https://www.tiktok.com/@formulak.news" rel="noopener">TikTok</a>
-            <a href="https://www.facebook.com/formulak.news" rel="noopener">Facebook</a>
+            <a href="https://www.facebook.com/share/1A1vyzak8K/" rel="noopener">Facebook</a>
           </div>
         </div>
         <p className="disclaimer">
