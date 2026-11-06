@@ -1,35 +1,33 @@
-/* A news story as a 9:16 video (11 s): the photo slowly zooms, the headline arrives word by word,
-   the three key points follow, and the logo card closes. Safe zones: top 220 px, bottom 250 px. */
+/* A news story as a 9:16 video (11 s), in the site's starting-grid world: photo on black, the headline parked in a painted
+   slot, the key points in staggered slots, the logo closing. Text stays inside SAFE. */
 import { AbsoluteFill, Img, interpolate, staticFile, useCurrentFrame } from "remotion";
-import { C, EndCard, LATIN, Mark, SAFE, SORANI, Sun, tokens, useSpring, useT, Wordmark } from "./brand";
+import { C, EndCard, LATIN, SAFE, SlotMark, SORANI, tokens, useT, Wordmark } from "./brand";
+import { K_PATH } from "../../src/components/logo-paths";
 
 export type NewsProps = { headline: string; points: string[]; image: string | null; label: string; colour: string };
 
 export const NEWS_FRAMES = 330;
 const POINTS_AT = 150;
 const END_AT = 268;
+const MAST = 340; // black bar above the photo, holding the logo below TikTok's top bar
+const PHOTO = 640;
 
 const src = (image: string) => (/^https?:/.test(image) ? image : staticFile(image));
+const latinStyle = { fontFamily: LATIN, fontWeight: 800, direction: "ltr", unicodeBidi: "isolate" } as const;
+
+/** Long Sorani headlines step down so they always fit between the photo and TikTok's caption area. */
+const headlineSize = (text: string) => (text.length > 90 ? 52 : text.length > 60 ? 60 : 72);
+const pointSize = (points: string[]) => (points.join("").length > 240 ? 40 : 48);
 
 function Headline({ text, start }: { text: string; start: number }) {
   const f = useCurrentFrame();
-  const words = tokens(text);
+  const size = headlineSize(text);
   return (
-    <h1 dir="rtl" style={{ margin: 0, font: `900 78px/1.42 ${SORANI}`, color: "#fff", textWrap: "balance" }}>
-      {words.map((w, i) => {
-        const t = interpolate(f, [start + i * 4, start + i * 4 + 12], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+    <h1 dir="rtl" style={{ margin: 0, font: `700 ${size}px/1.4 ${SORANI}`, color: "#fff", textWrap: "balance" }}>
+      {tokens(text).map((w, i) => {
+        const t = interpolate(f, [start + i * 3, start + i * 3 + 10], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
         return (
-          <span
-            key={i}
-            style={{
-              display: "inline-block",
-              marginLeft: "0.28em", // physical: a Latin word is LTR, so its inline end would be on the wrong side
-              opacity: t,
-              transform: `translateY(${(1 - t) * 40}px)`,
-              filter: `blur(${(1 - t) * 8}px)`,
-              ...(w.latin ? { fontFamily: LATIN, fontWeight: 800, direction: "ltr", unicodeBidi: "isolate" } : {}),
-            }}
-          >
+          <span key={i} style={{ display: "inline-block", marginLeft: "0.28em", opacity: t, transform: `translateY(${(1 - t) * 18}px)`, ...(w.latin ? latinStyle : {}) }}>
             {w.t}
           </span>
         );
@@ -38,96 +36,75 @@ function Headline({ text, start }: { text: string; start: number }) {
   );
 }
 
-function Point({ text, index, start }: { text: string; index: number; start: number }) {
-  const s = useSpring(start + index * 24, 15);
+/** One key point. Even rows sit a little to the left, as the second car of a pair sits behind the first. */
+function Point({ text, index, start, size }: { text: string; index: number; start: number; size: number }) {
+  const t = useT(start + 8, 12);
   return (
-    <div
-      dir="rtl"
-      style={{
-        display: "flex",
-        alignItems: "flex-start",
-        gap: 30,
-        opacity: Math.min(1, s * 1.4),
-        transform: `translateX(${(1 - s) * 140}px)`,
-        background: "rgba(10,10,10,0.78)",
-        border: "2px solid rgba(255,255,255,0.18)",
-        borderRadius: 40,
-        padding: "34px 40px",
-      }}
-    >
-      <span style={{ flex: "none", width: 76, height: 76, borderRadius: 999, background: C.gold, color: C.plum, display: "grid", placeItems: "center", font: `900 44px/1 ${SORANI}` }}>
-        {"١٢٣"[index]}
-      </span>
-      <span style={{ font: `800 46px/1.5 ${SORANI}`, color: "#fff" }}>
+    <div dir="rtl" style={{ position: "relative", padding: "34px 30px 8px", marginRight: index % 2 ? 56 : 0, marginLeft: index % 2 ? 0 : 56 }}>
+      <SlotMark start={start} ink={index === 0 ? C.berry : "#fff"} />
+      <div style={{ opacity: t, transform: `translateY(${(1 - t) * 14}px)`, font: `700 ${size}px/1.5 ${SORANI}`, color: "#fff" }}>
         {tokens(text).map((w, i) => (
-          <span key={i} style={w.latin ? { fontFamily: LATIN, fontWeight: 700, direction: "ltr", unicodeBidi: "isolate" } : undefined}>
-            {w.t}{" "}
+          <span key={i}>
+            <span style={w.latin ? latinStyle : undefined}>{w.t}</span>{" "}
           </span>
         ))}
-      </span>
+      </div>
     </div>
   );
 }
 
-export function News({ headline, points, image, label, colour }: NewsProps) {
+export function News({ headline, points, image, label }: NewsProps) {
   const f = useCurrentFrame();
-  const zoom = interpolate(f, [0, NEWS_FRAMES], [1.04, 1.18]);
-  const fadeIn = useT(0, 18);
-  const top = useSpring(6, 16);
-  const panel = useSpring(18, 16);
-  const toPoints = useT(POINTS_AT - 14, 16);
-  const shade = interpolate(f, [POINTS_AT - 14, POINTS_AT + 6], [0, 0.45], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const zoom = interpolate(f, [0, POINTS_AT], [1.02, 1.09], { extrapolateRight: "clamp" });
+  const reveal = useT(2, 18);
+  const tag = useT(16, 10);
+  // At POINTS_AT the black field rises over the photo, leaving the whole frame for the points.
+  const rise = useT(POINTS_AT - 12, 14);
+  const list = points.slice(0, 3);
+  const size = pointSize(list);
+
   return (
     <AbsoluteFill style={{ background: C.plum, fontFamily: SORANI }}>
-      {/* Photo, or the category colour with a turning sun */}
-      <AbsoluteFill style={{ opacity: fadeIn }}>
+      <div style={{ position: "absolute", top: MAST, left: 0, right: 0, height: PHOTO, overflow: "hidden", clipPath: `inset(0 0 ${(1 - reveal) * 100}% 0)` }}>
         {image ? (
           <Img src={src(image)} style={{ width: "100%", height: "100%", objectFit: "cover", transform: `scale(${zoom})` }} />
         ) : (
-          <AbsoluteFill style={{ background: colour, overflow: "hidden" }}>
-            <div style={{ position: "absolute", right: -520, top: -260 }}>
-              <Sun size={1700} turn={f * 0.2} core="#fff" coreOpacity={0.16} />
-            </div>
+          <AbsoluteFill style={{ background: C.lilac, display: "grid", placeItems: "center" }}>
+            <svg viewBox="0 -700 1000 700" width={520} height={364} aria-hidden="true">
+              <path fillRule="evenodd" d={K_PATH} fill={C.berry} />
+            </svg>
           </AbsoluteFill>
         )}
-      </AbsoluteFill>
-      <AbsoluteFill style={{ background: "linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0) 26%, rgba(10,10,10,0) 45%, rgba(10,10,10,0.85) 100%)" }} />
-      <AbsoluteFill style={{ background: C.plum, opacity: shade }} />
-
-      {/* Top: logo and category */}
-      <div style={{ position: "absolute", top: SAFE.top, left: SAFE.left, right: SAFE.right, display: "flex", justifyContent: "space-between", alignItems: "center", opacity: top, transform: `translateY(${(1 - top) * -60}px)` }}>
-        <span style={{ font: `800 40px/1 ${SORANI}`, color: "#fff", background: colour, padding: "22px 34px 26px", borderRadius: 999, border: "2px solid rgba(255,255,255,0.4)" }}>{label}</span>
-        <span dir="ltr" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <Wordmark size={74} />
-        </span>
       </div>
 
-      {/* Headline panel */}
-      <div
-        style={{
-          position: "absolute",
-          left: SAFE.left - 16,
-          right: SAFE.right - 20,
-          bottom: SAFE.bottom,
-          padding: "52px 56px 56px",
-          borderRadius: 56,
-          background: "rgba(10,10,10,0.62)",
-          border: "2px solid rgba(255,255,255,0.22)",
-          opacity: panel * (1 - toPoints),
-          transform: `translateY(${(1 - panel) * 200 - toPoints * 80}px)`,
-        }}
-      >
-        <Headline text={headline} start={26} />
+      {/* Category, on the photo's lower edge */}
+      <div dir="rtl" style={{ position: "absolute", top: MAST + PHOTO - 84, right: 64, background: C.berry, color: "#fff", font: `700 42px/1 ${SORANI}`, padding: "20px 30px 24px", opacity: tag * (1 - rise), transform: `translateX(${(1 - tag) * 40}px)` }}>
+        {label}
       </div>
+
+      {/* Headline in its slot */}
+      {f < POINTS_AT ? (
+        <div style={{ position: "absolute", left: SAFE.left, right: SAFE.right, top: MAST + PHOTO + 40, padding: "34px 30px 0" }}>
+          <SlotMark start={20} />
+          <Headline text={headline} start={28} />
+        </div>
+      ) : null}
+
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 1920 - MAST, background: C.plum, transform: `translateY(${(1 - rise) * 100}%)` }} />
 
       {/* Key points */}
       {f >= POINTS_AT - 4 ? (
-        <div style={{ position: "absolute", left: SAFE.left - 16, right: SAFE.right - 20, bottom: SAFE.bottom, display: "flex", flexDirection: "column", gap: 22 }}>
-          {points.slice(0, 3).map((p, i) => (
-            <Point key={i} text={p} index={i} start={POINTS_AT} />
+        <div style={{ position: "absolute", left: SAFE.left, right: SAFE.right, top: MAST + 10, bottom: SAFE.bottom, display: "flex", flexDirection: "column", justifyContent: "center", gap: 40 }}>
+          {list.map((p, i) => (
+            <Point key={i} text={p} index={i} start={POINTS_AT + i * 20} size={size} />
           ))}
         </div>
       ) : null}
+
+      {/* Logo, above everything but the end card */}
+      <div dir="ltr" style={{ position: "absolute", top: SAFE.top, left: SAFE.left, height: 70 }}>
+        <Wordmark size={70} />
+      </div>
 
       <EndCard start={END_AT} />
     </AbsoluteFill>

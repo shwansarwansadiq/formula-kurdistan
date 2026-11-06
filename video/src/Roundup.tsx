@@ -56,7 +56,7 @@ function Intro({ dateLabel, count }: { dateLabel: string; count: number }) {
           {ku(count)} هەواڵ
         </span>
         <h1 style={{ margin: 0, font: `900 120px/1.25 ${SORANI}`, color: "#fff", opacity: title, transform: `translateY(${(1 - title) * 60}px)` }}>
-          هەواڵەکانی ئەمڕۆی کۆریا
+          هەواڵەکانی ئەمڕۆی فۆڕمولا ١
         </h1>
         <p style={{ margin: 0, font: `700 52px/1.4 ${SORANI}`, color: "rgba(255,255,255,0.78)", opacity: sub }}>{dateLabel}</p>
       </div>

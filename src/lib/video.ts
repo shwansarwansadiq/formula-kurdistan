@@ -62,7 +62,7 @@ export function videoJob(s: Row): VideoJob | null {
   });
 }
 
-const DESIGN_VERSION = "v2";
+const DESIGN_VERSION = "v3";
 const SCENERY_VERSION = "s1";
 const ROUNDUP_VERSION = "r1"; // bump when the round-up video design changes // bump when the scenery design or music changes // v2: TikTok safe area // bump when the video designs change, to remake recent videos
 

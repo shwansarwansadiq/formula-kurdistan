@@ -6,10 +6,10 @@ import { Roundup, roundupFrames, type RoundupProps } from "./Roundup";
 import { Scenery, SCENERY_FRAMES, type SceneryProps } from "./Scenery";
 
 const sampleNews: NewsProps = {
-  headline: "تیزەری درامای «Nine to Six» بڵاوکرایەوە و Park Bo Gum ڕۆڵی سەرەکی دەگێڕێت",
-  points: ["تیزەری یەکەم ئەمڕۆ بڵاوکرایەوە.", "پەخشی یەکەم: چوارشەممە ٢٥ی تشرینی دووەم.", "٩ی شەو لە کۆریا، ٣ی پاشنیوەڕۆ لە هەولێر."],
+  headline: "Mercedes لە گراند پری بەرازیل دەتوانێت پاڵەوانێتی تیمەکان مسۆگەر بکات",
+  points: ["تیمەکە لە ١٩ پێشبڕکێی ئەم وەرزە ١٢یان بردووەتەوە.", "تەنها Ferrari لە ڕووی بیرکارییەوە دەتوانێت بیانگاتێ.", "پێشبڕکێی بەرازیل یەکشەممە بەڕێوە دەچێت."],
   image: "test.jpg",
-  label: "دراما و فیلم",
+  label: "پێشبڕکێکان",
   colour: "#171717",
 };
 

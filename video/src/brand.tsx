@@ -1,12 +1,5 @@
-/* FORMULAK's brand for video: colours, fonts (self-hosted, so renders never depend on a font server), the mark and the sun. */
-import "@fontsource/noto-kufi-arabic/500.css";
-import "@fontsource/noto-kufi-arabic/700.css";
-import "@fontsource/noto-kufi-arabic/800.css";
-import "@fontsource/noto-kufi-arabic/900.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/700.css";
-import "@fontsource/inter/800.css";
-import { interpolate, spring, useCurrentFrame, useVideoConfig, Easing } from "remotion";
+/* FORMULAK's brand for video: colours, Rabar and Archivo (self-hosted, so renders never depend on a font server), the mark. */
+import { continueRender, delayRender, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig, Easing } from "remotion";
 import { FORMULA_PATH, K_IN_WORD_PATH, K_PATH, LOGO_HEIGHT, LOGO_WIDTH } from "../../src/components/logo-paths";
 
 export const C = {
@@ -20,9 +13,21 @@ export const C = {
   mint: "#3FA88E",
   blue: "#3A5BD9",
 };
-export const SORANI = '"Rabar", "Noto Kufi Arabic", sans-serif';
-export const LATIN = '"Inter", sans-serif';
-export const WORD = '"Baloo 2", "Inter", sans-serif';
+export const SORANI = '"Rabar", sans-serif';
+export const LATIN = '"Archivo", sans-serif';
+export const WORD = LATIN;
+
+// Every frame waits for the fonts, so no video ever renders in a fallback face.
+if (typeof document !== "undefined") {
+  const wait = delayRender("Loading FORMULAK fonts");
+  const faces = [
+    new FontFace("Rabar", `url(${staticFile("fonts/Rabar-Regular.woff2")})`, { weight: "400" }),
+    new FontFace("Rabar", `url(${staticFile("fonts/Rabar-Bold.woff2")})`, { weight: "700" }),
+    new FontFace("Archivo", `url(${staticFile("fonts/Archivo-Latin.woff2")})`, { weight: "100 900", stretch: "62% 125%" }),
+    new FontFace("Archivo", `url(${staticFile("fonts/Archivo-LatinExt.woff2")})`, { weight: "100 900", stretch: "62% 125%", unicodeRange: "U+0100-02BA, U+1E00-1EFF" }),
+  ];
+  Promise.all(faces.map((f) => f.load().then((l) => document.fonts.add(l)))).then(() => continueRender(wait));
+}
 
 export const easeOut = Easing.bezier(0.23, 1, 0.32, 1);
 
@@ -88,29 +93,39 @@ export function Wordmark({ size }: { size: number }) {
   );
 }
 
-/** The closing card shared by every video: plum field opening from the centre, the mark drawing itself, the address. */
+/** The painted grid slot from the site: a bar across the front and two ticks running back, drawn from the right. */
+export function SlotMark({ start, ink = "#fff", tick = 44, weight = 8 }: { start: number; ink?: string; tick?: number; weight?: number }) {
+  const bar = useT(start, 14);
+  const ticks = useT(start + 8, 10);
+  const piece = { position: "absolute", background: ink, top: 0 } as const;
+  return (
+    <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+      <div style={{ ...piece, left: 0, right: 0, height: weight, transform: `scaleX(${bar})`, transformOrigin: "right" }} />
+      <div style={{ ...piece, right: 0, width: weight, height: tick, transform: `scaleY(${ticks})`, transformOrigin: "top" }} />
+      <div style={{ ...piece, left: 0, width: weight, height: tick, transform: `scaleY(${ticks})`, transformOrigin: "top" }} />
+    </div>
+  );
+}
+
+/** The closing card shared by every video: black wipes in from the right, the logo parks in its slot, the address follows. */
 export function EndCard({ start }: { start: number }) {
   const f = useCurrentFrame();
-  const open = interpolate(f, [start, start + 16], [0, 150], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: easeOut });
-  const txt = useT(start + 34, 14);
-  const pill = useSpring(start + 42);
-  const sunGrow = useT(start + 6, 30);
-  const word = useT(start + 26, 12);
+  const open = useT(start, 14);
+  const word = useT(start + 16, 14);
+  const line = useT(start + 26, 12);
   if (f < start) return null;
   return (
-    <div style={{ position: "absolute", inset: 0, background: C.plum, clipPath: `circle(${open}% at 50% 50%)`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 36, padding: safePad }}>
-      <div style={{ position: "absolute", width: 1600, height: 1600, left: -260, top: 160, opacity: 0.12 }}>
-        <Sun size={1600} grow={sunGrow} turn={(f - start) * 0.25} core={C.berry} />
+    <div style={{ position: "absolute", inset: 0, background: C.plum, clipPath: `inset(0 0 0 ${(1 - open) * 100}%)`, padding: `${SAFE.top}px ${SAFE.right}px ${SAFE.bottom}px ${SAFE.left}px`, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      <div style={{ position: "relative", padding: "60px 44px 44px" }}>
+        <SlotMark start={start + 8} ink={C.berry} tick={90} weight={12} />
+        <div dir="ltr" style={{ opacity: word, transform: `translateY(${(1 - word) * -36}px)` }}>
+          <Wordmark size={103} />
+        </div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }} dir="ltr">
-                <span style={{ opacity: word }}>
-          <Wordmark size={140} />
-        </span>
+      <div dir="rtl" style={{ opacity: line, transform: `translateY(${(1 - line) * 24}px)`, marginTop: 44, font: `700 58px/1.5 ${SORANI}`, color: "#fff" }}>
+        هەواڵی فۆڕمولا ١ بە کوردی
       </div>
-      <div dir="rtl" style={{ opacity: txt, transform: `translateY(${(1 - txt) * 30}px)`, font: `800 58px/1.5 ${SORANI}`, color: "#fff", textAlign: "center" }}>
-        هەواڵی کۆری بە کوردی
-      </div>
-      <div dir="ltr" style={{ transform: `scale(${pill})`, font: `800 64px/1 ${LATIN}`, background: "#fff", color: C.berryDeep, padding: "30px 54px", borderRadius: 999 }}>
+      <div dir="ltr" style={{ opacity: line, marginTop: 18, textAlign: "right", font: `800 58px/1.2 ${LATIN}`, fontStretch: "112%", color: "#fff" }}>
         formulak.news
       </div>
     </div>
