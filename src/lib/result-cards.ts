@@ -88,7 +88,7 @@ export async function makeResultCard(race: Race, session: ResultSession, iso: st
   if (rows.length < 3) return null;
   const top: Podium[] = [];
   for (const r of rows) {
-    const photo = await driverPhoto(r.wiki);
+    const photo = await driverPhoto(`${r.given} ${r.name}`, race.season);
     top.push({ pos: r.pos, name: r.name, given: r.given, code: r.code, team: r.team, time: r.time, photo: photo?.url ?? null, credit: photo?.credit ?? null });
   }
   const shape = race.lat !== null && race.lng !== null ? circuitNear(race.lat, race.lng) : null;

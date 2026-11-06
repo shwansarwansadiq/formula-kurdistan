@@ -39,7 +39,7 @@ export const MIN_SCORE = Number(process.env.FORMULAK_MIN_SCORE ?? 7);
 const PER_RUN = 2;
 
 let anthropic: Anthropic | null = null;
-function ai(): Anthropic {
+export function ai(): Anthropic {
   return (anthropic ??= new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }));
 }
 

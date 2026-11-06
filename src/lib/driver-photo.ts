@@ -1,43 +1,77 @@
-/* A driver's photo for result cards: the lead image of their English Wikipedia article, used only when Wikimedia
-   Commons lists it under a free licence, with the author and licence for the credit line (the photo rule). */
+/* A driver's photo for result cards (Shwan, 6 Nov): from the current season only, the driver alone in a racing
+   suit, free licence only (Wikimedia Commons), credited. Official F1 profile photos are not free to use, so they
+   are never taken. A small vision check confirms the racing suit; with no match the card shows the K instead. */
 import { unstable_cache } from "next/cache";
+import { ai, SCORE_MODEL } from "./writer";
 
 export type DriverPhoto = { url: string; credit: string };
 
 const UA = { "User-Agent": "FORMULAK/1.0 (https://formulak.news)" };
 const FREE = /^(cc[ -]?by|cc0|public domain|pd\b|ogl)/i; // OGL: UK Open Government Licence, free with credit
-
 const strip = (html: string) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 
-async function lookup(wiki: string): Promise<DriverPhoto | null> {
-  const m = wiki.match(/^https?:\/\/en\.wikipedia\.org\/wiki\/(.+)$/);
-  if (!m) return null;
-  const title = decodeURIComponent(m[1]);
-  const page = await fetch(
-    `https://en.wikipedia.org/w/api.php?action=query&format=json&redirects=1&prop=pageimages&piprop=name&titles=${encodeURIComponent(title)}`,
-    { headers: UA, signal: AbortSignal.timeout(10_000) },
+type Candidate = { title: string; url: string; credit: string };
+
+async function candidates(name: string, season: string): Promise<Candidate[]> {
+  const q = `"${name}" ${season} filetype:bitmap`;
+  const j = await fetch(
+    `https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=40&gsrsearch=${encodeURIComponent(q)}&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=900`,
+    { headers: UA, signal: AbortSignal.timeout(12_000) },
   ).then((r) => r.json());
-  const name = (Object.values(page?.query?.pages ?? {})[0] as { pageimage?: string } | undefined)?.pageimage;
-  if (!name) return null;
-  const info = await fetch(
-    `https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=900&titles=${encodeURIComponent(`File:${name}`)}`,
-    { headers: UA, signal: AbortSignal.timeout(10_000) },
-  ).then((r) => r.json());
-  const ii = (Object.values(info?.query?.pages ?? {})[0] as { imageinfo?: { thumburl?: string; extmetadata?: Record<string, { value?: string }> }[] } | undefined)
-    ?.imageinfo?.[0];
-  const meta = ii?.extmetadata ?? {};
-  const licence = strip(meta.LicenseShortName?.value ?? "");
-  // Not on Commons (a local, non-free file) or not a free licence: no photo.
-  if (!ii?.thumburl || !FREE.test(licence) || meta.NonFree?.value) return null;
-  const artist = strip(meta.Artist?.value ?? "").slice(0, 60) || "Wikimedia Commons";
-  return { url: ii.thumburl, credit: `${artist} (${licence})` };
+  type Info = { thumburl?: string; width?: number; height?: number; extmetadata?: Record<string, { value?: string }> };
+  const pages = Object.values(j?.query?.pages ?? {}) as { title: string; index?: number; imageinfo?: Info[] }[];
+  const family = name.split(" ").at(-1)!.toLowerCase();
+  return pages
+    .sort((a, b) => (a.index ?? 0) - (b.index ?? 0))
+    .flatMap((p) => {
+      const ii = p.imageinfo?.[0];
+      const m = ii?.extmetadata ?? {};
+      const licence = strip(m.LicenseShortName?.value ?? "");
+      const taken = strip(m.DateTimeOriginal?.value ?? "");
+      // This season's photos only, free, big enough, and named after this driver.
+      if (!ii?.thumburl || !FREE.test(licence) || m.NonFree?.value) return [];
+      if (!taken.startsWith(season) || (ii.width ?? 0) < 900 || !p.title.toLowerCase().includes(family)) return [];
+      const artist = strip(m.Artist?.value ?? "").slice(0, 60) || "Wikimedia Commons";
+      return [{ title: p.title, url: ii.thumburl, credit: `${artist} (${licence})` }];
+    });
 }
 
-/** Cached for a week; null when there is no free photo. */
-export async function driverPhoto(wiki: string | null): Promise<DriverPhoto | null> {
-  if (!wiki) return null;
+/** Asks the vision model whether the photo shows this driver alone, face visible, in a racing suit. */
+async function inRacingSuit(url: string): Promise<boolean> {
+  const res = await ai().messages.create({
+    model: SCORE_MODEL,
+    max_tokens: 20,
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "image", source: { type: "url", url } },
+          { type: "text", text: "Is this one person (not a group, not only a car), face clearly visible, wearing a motor racing suit (fireproof overalls)? Answer only yes or no." },
+        ],
+      },
+    ],
+  });
+  const text = res.content.map((c) => (c.type === "text" ? c.text : "")).join("").toLowerCase();
+  return text.trim().startsWith("yes");
+}
+
+/** Titles that usually mean a person, not a car on track, are checked first. */
+const PERSON = /award|celebrat|podium|walk|parade|portrait|driver|press|interview|paddock|garage|helmet|grid|fans/i;
+
+async function lookup(name: string, season: string): Promise<DriverPhoto | null> {
+  const list = await candidates(name, season);
+  const ordered = [...list.filter((c) => PERSON.test(c.title)), ...list.filter((c) => !PERSON.test(c.title))];
+  for (const c of ordered.slice(0, 12)) {
+    if (await inRacingSuit(c.url).catch(() => false)) return { url: c.url, credit: c.credit };
+  }
+  return null;
+}
+
+/** Cached for a week per driver and season; null when no photo meets the rule. */
+export async function driverPhoto(name: string, season: string): Promise<DriverPhoto | null> {
+  if (!name.trim() || !/^\d{4}$/.test(season)) return null;
   try {
-    return await unstable_cache(() => lookup(wiki), ["driver-photo-v2", wiki], { revalidate: 7 * 86400 })();
+    return await unstable_cache(() => lookup(name, season), ["driver-photo-v3", name, season], { revalidate: 7 * 86400 })();
   } catch {
     return null;
   }
