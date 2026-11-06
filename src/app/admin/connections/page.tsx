@@ -1,7 +1,7 @@
 import { AdminShell } from "@/components/admin/AdminShell";
 import { metaTargets } from "@/lib/meta";
 import { db } from "@/lib/db";
-import { draftStatus, tiktokConfigured, tiktokStatus } from "@/lib/tiktok";
+import { connectedAccount, draftStatus, tiktokConfigured, tiktokStatus } from "@/lib/tiktok";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +13,7 @@ export default async function ConnectionsPage() {
   );
   const tiktok = await tiktokStatus().catch(() => ({ connected: false }));
 
+  const account = tiktok.connected ? await connectedAccount().catch((e: unknown) => (e instanceof Error ? e.message : String(e))) : null;
   const { data: sent } = await db()
     .from("stories")
     .select("id, tiktok_publish_id")
@@ -36,7 +37,7 @@ export default async function ConnectionsPage() {
         <dt>Instagram</dt>
         <dd>{meta.instagram ? <bdi>@{meta.instagram}</bdi> : "پەیوەست نییە"}</dd>
         <dt>TikTok</dt>
-        <dd>{tiktok.connected ? "پەیوەستە" : tiktokConfigured() ? "کلیلەکان هەن، هێشتا پەیوەست نەکراوە" : "کلیلەکان دانەنراون"}</dd>
+        <dd>{tiktok.connected ? "پەیوەستە" : tiktokConfigured() ? "کلیلەکان هەن، هێشتا پەیوەست نەکراوە" : "کلیلەکان دانەنراون"}{account ? <> <bdi>({account})</bdi></> : null}</dd>
         {drafts.map((d) => (
           <div key={d.id} data-draft={d.id}>
             <dt>TikTok draft #{d.id}</dt>

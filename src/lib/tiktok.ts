@@ -129,6 +129,14 @@ export async function uploadDraft(videoUrl: string): Promise<string> {
   return init.publish_id;
 }
 
+/** The TikTok account the saved connection belongs to. */
+export async function connectedAccount(): Promise<string> {
+  const res = await fetch(`${API}/user/info/?fields=display_name`, { headers: { Authorization: `Bearer ${await accessToken()}` }, signal: AbortSignal.timeout(15_000) });
+  const json = (await res.json().catch(() => ({}))) as ApiResponse<{ user?: { display_name?: string } }>;
+  if (!res.ok || (json.error?.code && json.error.code !== "ok")) throw new TikTokError(`${json.error?.code ?? res.status}: ${json.error?.message ?? ""}`);
+  return json.data?.user?.display_name ?? "";
+}
+
 /** Where a sent draft is now (e.g. SEND_TO_USER_INBOX, PUBLISH_COMPLETE, FAILED). */
 export async function draftStatus(publishId: string): Promise<string> {
   const d = await api<{ status?: string; fail_reason?: string }>("/post/publish/status/fetch/", { publish_id: publishId });
