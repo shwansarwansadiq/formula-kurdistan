@@ -16,7 +16,7 @@ update sources set active = false where name in ('Motorsport.com', 'BBC Sport F1
 
 -- First 30 glossary terms: a draft for Shwan's review (from the plan)
 insert into glossary (english, sorani, note) values
-  ('Formula 1', 'فۆرمولا ١', 'Latin F1 is also fine'),
+  ('Formula 1', 'فۆڕمولا ١', 'Latin F1 is also fine'),
   ('Grand Prix', 'گراند پری', null),
   ('race', 'پێشبڕکێ', null),
   ('driver', 'شۆفێر', null),

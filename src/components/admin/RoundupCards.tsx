@@ -20,7 +20,7 @@ export function RoundupCover({ dateLabel, stories, format }: { dateLabel: string
           </span>
           <span className="cc-chip">هەواڵەکانی ڕۆژ</span>
         </div>
-        <h3 className="rc-title">هەواڵەکانی ئەمڕۆی فۆرمولا ١</h3>
+        <h3 className="rc-title">هەواڵەکانی ئەمڕۆی فۆڕمولا ١</h3>
         <p className="cc-sub">
           {dateLabel} · {ku(stories.length)} هەواڵ
         </p>
@@ -62,7 +62,7 @@ export function RoundupEnd({ format }: { format: "feed" | "story" }) {
           <Mark size={190} ink="#fff" />
           <span>kur<i>ean</i></span>
         </span>
-        <p className="re-line">هەموو ڕۆژێک هەواڵی فۆرمولا ١ بە کوردی</p>
+        <p className="re-line">هەموو ڕۆژێک هەواڵی فۆڕمولا ١ بە کوردی</p>
         <p className="re-cats">پێشبڕکێکان · تیم و شۆفێران · تەکنیک و یاسا · بازرگانی</p>
         <span dir="ltr" className="sc-link re-link">formulak.news</span>
         <p className="re-follow">

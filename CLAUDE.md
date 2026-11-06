@@ -1,4 +1,4 @@
-# Formula K · فۆرمولا کەی — project guide for Claude
+# Formula K · فۆڕمولا کەی — project guide for Claude
 
 Formula K is an automated Sorani Kurdish news site about Formula 1 first, then the wider formula racing world and
 its industry. Owner: Shwan. The system finds news, writes it in Sorani, designs the posts, and waits; Shwan's only

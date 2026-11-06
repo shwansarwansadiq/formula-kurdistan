@@ -4,8 +4,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FORMULAK_SITE_URL ?? "https://formulak.news"),
-  title: "فۆرمولا کەی · هەواڵی فۆرمولا ١ بە کوردی",
-  description: "هەواڵی فۆرمولا ١ و جیهانی پێشبڕکێی فۆرمولا بە کوردیی سۆرانی، هەموو ڕۆژێک، لەگەڵ سەرچاوەکانی.",
+  title: "فۆڕمولا کەی · هەواڵی فۆڕمولا ١ بە کوردی",
+  description: "هەواڵی فۆڕمولا ١ و جیهانی پێشبڕکێی فۆڕمولا بە کوردیی سۆرانی، هەموو ڕۆژێک، لەگەڵ سەرچاوەکانی.",
   openGraph: { siteName: "FORMULA K", locale: "ckb_IQ", type: "website" },
 };
 

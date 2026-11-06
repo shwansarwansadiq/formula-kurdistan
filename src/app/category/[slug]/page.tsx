@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const key = categoryFromSlug((await params).slug);
-  return key ? { title: `${CATEGORY_META[key].label} · فۆرمولا کەی` } : {};
+  return key ? { title: `${CATEGORY_META[key].label} · فۆڕمولا کەی` } : {};
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {

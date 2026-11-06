@@ -6,7 +6,7 @@ export function Masthead({ issue, active, note }: { issue?: number; active?: Cat
   return (
     <header className="mast">
       <div className="mast-row">
-        <Link href="/" className="mast-home" aria-label="فۆرمولا کەی، سەرەتا">
+        <Link href="/" className="mast-home" aria-label="فۆڕمولا کەی، سەرەتا">
           <Logo animated />
         </Link>
         <div className="issue">

@@ -1,7 +1,7 @@
 import { Masthead } from "@/components/Masthead";
 import { SiteFooter } from "@/components/StoryParts";
 
-export const metadata = { title: "چۆن دەپێوین · How we measure · فۆرمولا کەی" };
+export const metadata = { title: "چۆن دەپێوین · How we measure · فۆڕمولا کەی" };
 
 const METRICS: [string, string, string][] = [
   ["خوێنەری جیاواز", "Unique visitors", "Distinct browsers in the period. Without consent a browser is counted once per day (a salted hash of the day, network address and browser that cannot be reversed; the address is never stored). With consent a random ID kept in the browser lets us recognise return visits."],
@@ -27,7 +27,7 @@ export default function Measure() {
           <p className="byline" dir="ltr" lang="en">How we measure</p>
         </header>
         <div className="art-body">
-          <p>فۆرمولا کەی خوێنەرانی خۆی بە ئامرازێکی خۆی دەژمێرێت، بێ کوکی و بێ هەڵگرتنی ناونیشانی IP. هیچ داتایەک نافرۆشین و بە کەسی تر نادەین.</p>
+          <p>فۆڕمولا کەی خوێنەرانی خۆی بە ئامرازێکی خۆی دەژمێرێت، بێ کوکی و بێ هەڵگرتنی ناونیشانی IP. هیچ داتایەک نافرۆشین و بە کەسی تر نادەین.</p>
           <p dir="ltr" lang="en" style={{ fontFamily: "var(--latin)", fontSize: 15 }}>
             Formula K counts its readers with its own first-party tool. No cookies, no third-party trackers, no stored IP addresses.
             All times are Asia/Baghdad. Days still in progress, and days before counting began, are labelled as incomplete.

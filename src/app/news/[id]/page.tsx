@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const story = await publishedStory(Number((await params).id));
   if (!story) return {};
   return {
-    title: `${story.headline} · فۆرمولا کەی`,
+    title: `${story.headline} · فۆڕمولا کەی`,
     description: story.key_points[0] ?? undefined,
     alternates: { canonical: `${siteUrl()}/news/${story.id}` },
     openGraph: {
@@ -49,7 +49,7 @@ export default async function StoryPage({ params }: Params) {
             <Bidi text={story.headline} />
           </h1>
           <p className="byline">
-            {soraniDate(story.published_at ?? story.created_at)} · فۆرمولا کەی
+            {soraniDate(story.published_at ?? story.created_at)} · فۆڕمولا کەی
           </p>
         </header>
         <div className="art-body">
@@ -134,7 +134,7 @@ export default async function StoryPage({ params }: Params) {
               </>
             ) : null}
             <dt>نووسینی کوردی</dt>
-            <dd>فۆرمولا کەی</dd>
+            <dd>فۆڕمولا کەی</dd>
           </dl>
           <p className="rights">
             خاوەنی ئەم وێنەیە یان دەقێکی ئێرەیت و دەتەوێت لاببرێت؟ نامە بنێرە بۆ <bdi className="lat">@formulak.news</bdi> و

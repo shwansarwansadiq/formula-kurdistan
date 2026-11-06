@@ -272,8 +272,8 @@ type FeedItem = { id: number; kind: string; place_ckb: string; place_en: string;
 
 export function feedCaptions(s: FeedItem) {
   const credit = `${s.kind === "video" ? "🎥 Video" : "📷 Photo"}: ${s.photographer} · ${s.source === "pixabay" ? "Pixabay" : "Pexels"}`;
-  const body = `${s.place_ckb} 📍\n${s.place_en}\n\nپشوویەک لە نێوان هەواڵەکاندا: دیمەنێکی کۆریا لەگەڵ مۆسیقای فۆرمولا کەی.`;
-  const tags = "#فۆرمولا کەی #کۆریا #Korea #Formula K";
+  const body = `${s.place_ckb} 📍\n${s.place_en}\n\nپشوویەک لە نێوان هەواڵەکاندا: دیمەنێکی کۆریا لەگەڵ مۆسیقای فۆڕمولا کەی.`;
+  const tags = "#فۆڕمولا کەی #کۆریا #Korea #Formula K";
   return {
     instagram: `${body}\nهەواڵی ڕۆژانەی کۆریا لە formulak.news\n\n${credit}\n\n${tags}`,
     facebook: `${body}\nهەواڵی ڕۆژانەی کۆریا: https://formulak.news\n\n${credit}\n\n${tags}`,

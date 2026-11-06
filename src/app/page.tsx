@@ -48,7 +48,7 @@ export default async function Home() {
           <section className="empty field" style={{ background: "var(--berry)" }}>
             <Sun className="field-sun spin" />
             <h1 className="lead-title">یەکەم هەواڵ بەم زووانە دێت</h1>
-            <p className="lead-dek">فۆرمولا کەی هەواڵی فۆرمولا ١ و جیهانی پێشبڕکێی فۆرمولا بە کوردی دەنووسێت. شوێنمان بکەوە تا یەکەم هەواڵ لەدەست نەدەیت.</p>
+            <p className="lead-dek">فۆڕمولا کەی هەواڵی فۆڕمولا ١ و جیهانی پێشبڕکێی فۆڕمولا بە کوردی دەنووسێت. شوێنمان بکەوە تا یەکەم هەواڵ لەدەست نەدەیت.</p>
           </section>
         )}
 

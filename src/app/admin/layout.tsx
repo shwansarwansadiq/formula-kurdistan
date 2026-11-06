@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./admin.css";
 
-export const metadata: Metadata = { title: "داشبۆرد · فۆرمولا کەی", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "داشبۆرد · فۆڕمولا کەی", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 // Regenerate calls the writer model, which can take a minute.
 export const maxDuration = 300;

@@ -110,9 +110,9 @@ export async function syncRoundup(now = new Date()): Promise<void> {
 export function roundupCaption(day: string, stories: RoundupStory[], kind: "carousel" | "reel"): string {
   const list = stories.map((s, i) => `${kuDigits(i + 1)}. ${s.card_headline.trim()}`).join("\n");
   const credits = [...new Set(stories.map((s) => s.image_credit).filter(Boolean))];
-  const lead = kind === "carousel" ? "هەواڵەکانی ئەمڕۆی فۆرمولا ١ بە کوردی 🏁" : "هەواڵەکانی ئەمڕۆ لە یەک ڤیدیۆدا 🎬";
+  const lead = kind === "carousel" ? "هەواڵەکانی ئەمڕۆی فۆڕمولا ١ بە کوردی 🏁" : "هەواڵەکانی ئەمڕۆ لە یەک ڤیدیۆدا 🎬";
   const cats: string[] = [...new Set(stories.map((s) => s.category))];
-  const tags = ["#فۆرمولا_کەی", "#فۆرمولا_١", "#F1", ...(cats.includes("other_series") ? ["#motorsport"] : [])];
+  const tags = ["#فۆڕمولا_کەی", "#فۆڕمولا_١", "#F1", ...(cats.includes("other_series") ? ["#motorsport"] : [])];
   return [
     `${lead}\n${dayLabel(day)}`,
     list,

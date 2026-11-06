@@ -39,7 +39,7 @@ function Intro() {
       <div dir="ltr" style={{ marginTop: 10, transform: `scale(${word})`, font: `800 170px/1 ${WORD}`, color: C.plum }}>
         kur<span style={{ color: C.berry }}>ean</span>
       </div>
-      <div style={{ marginTop: 26, opacity: ckb, font: `900 92px/1 ${SORANI}`, color: C.berryDeep }}>فۆرمولا کەی</div>
+      <div style={{ marginTop: 26, opacity: ckb, font: `900 92px/1 ${SORANI}`, color: C.berryDeep }}>فۆڕمولا کەی</div>
     </AbsoluteFill>
   );
 }
@@ -213,7 +213,7 @@ function TopHundred() {
           <div dir="rtl" style={{ position: "relative", font: `900 54px/1.4 ${SORANI}`, color: "#fff", textAlign: "center" }}>
             هەموو ١٠٠ گۆرانییەکە
             <br />
-            لە فۆرمولا کەیدا لێبدە
+            لە فۆڕمولا کەیدا لێبدە
           </div>
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function LoginPage() {
       <Sun className="field-sun" />
       <div className="login-card glass-light">
         <Mark size={72} animated />
-        <h1>داشبۆردی فۆرمولا کەی</h1>
+        <h1>داشبۆردی فۆڕمولا کەی</h1>
         <p>تەنها بۆ پەسەندکردنی هەواڵەکان.</p>
         <LoginForm />
       </div>
