@@ -47,7 +47,7 @@ export async function suitAnswer(url: string): Promise<string> {
   const data = Buffer.from(await img.arrayBuffer()).toString("base64");
   const res = await ai().messages.create({
     model: SCORE_MODEL,
-    max_tokens: 20,
+    max_tokens: 400,
     messages: [
       {
         role: "user",
@@ -58,7 +58,8 @@ export async function suitAnswer(url: string): Promise<string> {
       },
     ],
   });
-  return res.content.map((c) => (c.type === "text" ? c.text : "")).join("").toLowerCase().trim();
+  const text = res.content.map((c) => (c.type === "text" ? c.text : "")).join("").toLowerCase().trim();
+  return text || `(no answer: ${res.stop_reason})`;
 }
 
 const inRacingSuit = async (url: string) => (await suitAnswer(url)).startsWith("yes");
