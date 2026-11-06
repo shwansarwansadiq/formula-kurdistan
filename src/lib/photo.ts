@@ -167,16 +167,6 @@ export async function attachPhoto(storyId: number, headline: string, reports: Ph
     }
   }
 
-  // Formula K's rule: source photos are never used automatically, because nearly all race photos belong to
-  // agencies, teams or F1. They stay in photo_options for Shwan to choose by hand. FORMULAK_AUTO_SOURCE_PHOTOS=1 reverses this.
-  if (process.env.FORMULAK_AUTO_SOURCE_PHOTOS !== "1") {
-    await db()
-      .from("stories")
-      .update({ image_url: null, image_source: null, image_credit: null, image_license: null, photo_checked_at: now })
-      .eq("id", storyId);
-    return null;
-  }
-
   // The source's own photo: download every candidate and keep the largest.
   let best: { c: { image: string; page: string; credit: string }; d: Downloaded } | null = null;
   for (const c of found.main) {

@@ -25,9 +25,8 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
 ## Differences from Kurean
 
 - Categories: `f1_race`, `f1_teams`, `f1_tech`, `f1_business`, `other_series`.
-- **Source photos are never used automatically** (`attachPhoto`): free Wikimedia photo of the same subject, otherwise a
-  branded card. Source photos stay as options Shwan can pick by hand. `FORMULAK_AUTO_SOURCE_PHOTOS=1` reverses this.
-  Recommended in the plan; Shwan has not yet confirmed.
+- Photos (Shwan, 6 Nov, chose Kurean's rule after hearing the copyright and strike risk): free Wikimedia photo of the same subject first,
+  otherwise the largest source photo with credit; agency photos are flagged high risk in /admin; under 800 px gets a branded card; takedowns are immediate.
 - Never use race footage, broadcast screenshots, onboard clips, team radio or F1 audio.
 - Results, positions, points and times are copied from the source, never worked out. Transfers are "reported" until confirmed.
 - `META_PAGE_ID` has no default: posting is refused until it is set to Formula K's Page.
@@ -35,8 +34,8 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
 
 ## Temporary leftovers from Kurean
 
-- The mark, wordmark and colours are placeholders until the logo is approved. Rabar isn't in the repo yet: Shwan must
-  confirm web use is allowed and the regular and bold files must be chosen.
+- The mark, wordmark and colours are placeholders until the logo is approved. Shwan confirmed Rabar may be used on the web (6 Nov);
+  the regular and bold files still need choosing and adding.
 - Inactive and unscheduled: Korea chart (`chart.ts`, `chart-story.ts`, `listen.ts`, `KoreaChart`), scenery (`places.ts`,
   `scenery.ts`). Replace with standings and remove in phase 4. `video/src/Promo.tsx` and sample scenes still describe Korea: rewrite before rendering.
 - Don't use Kurean's music names or copy in new work without checking them. /privacy and analytics text still needs a pass.
