@@ -43,7 +43,7 @@ export async function suitAnswer(url: string): Promise<string> {
   const img = await fetch(url, { headers: UA, signal: AbortSignal.timeout(15_000) });
   if (!img.ok) throw new Error(`photo ${img.status}`);
   const type = img.headers.get("content-type")?.split(";")[0] ?? "image/jpeg";
-  if (!/^image\/(jpeg|png|webp|gif)$/.test(type)) return false;
+  if (!/^image\/(jpeg|png|webp|gif)$/.test(type)) return "no (not a supported image)";
   const data = Buffer.from(await img.arrayBuffer()).toString("base64");
   const res = await ai().messages.create({
     model: SCORE_MODEL,
