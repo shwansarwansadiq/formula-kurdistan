@@ -13,9 +13,10 @@ const strip = (html: string) => html.replace(/<[^>]+>/g, "").replace(/\s+/g, " "
 type Candidate = { title: string; url: string; credit: string };
 
 export async function candidates(name: string, season: string): Promise<Candidate[]> {
-  const q = `"${name}" ${season} filetype:bitmap`;
+  // Family name only: many files are titled "… 2026 Nr. 12 Antonelli" without the full name.
+  const q = `"${name.split(" ").at(-1)}" ${season} filetype:bitmap`;
   const j = await fetch(
-    `https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=40&gsrsearch=${encodeURIComponent(q)}&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=900`,
+    `https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=60&gsrsearch=${encodeURIComponent(q)}&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=900`,
     { headers: UA, signal: AbortSignal.timeout(12_000) },
   ).then((r) => r.json());
   type Info = { thumburl?: string; width?: number; height?: number; extmetadata?: Record<string, { value?: string }> };
@@ -70,7 +71,7 @@ const PERSON = /award|celebrat|podium|walk|parade|portrait|driver|press|intervie
 async function lookup(name: string, season: string): Promise<DriverPhoto | null> {
   const list = await candidates(name, season);
   const ordered = [...list.filter((c) => PERSON.test(c.title)), ...list.filter((c) => !PERSON.test(c.title))];
-  for (const c of ordered.slice(0, 12)) {
+  for (const c of ordered.slice(0, 16)) {
     try {
       if (await inRacingSuit(c.url)) return { url: c.url, credit: c.credit };
     } catch (e) {
@@ -84,7 +85,7 @@ async function lookup(name: string, season: string): Promise<DriverPhoto | null>
 export async function driverPhoto(name: string, season: string): Promise<DriverPhoto | null> {
   if (!name.trim() || !/^\d{4}$/.test(season)) return null;
   try {
-    return await unstable_cache(() => lookup(name, season), ["driver-photo-v5", name, season], { revalidate: 7 * 86400 })();
+    return await unstable_cache(() => lookup(name, season), ["driver-photo-v6", name, season], { revalidate: 7 * 86400 })();
   } catch {
     return null;
   }

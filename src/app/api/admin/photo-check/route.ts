@@ -14,6 +14,6 @@ export async function GET(req: Request) {
   const list = await candidates(name, season).catch((e: unknown) => String(e));
   if (typeof list === "string") return NextResponse.json({ error: list });
   const checked = [];
-  for (const c of list.slice(0, 4)) checked.push({ title: c.title, answer: await suitAnswer(c.url).catch((e: unknown) => `error: ${e instanceof Error ? e.message : e}`) });
+  for (const c of list.slice(0, Number(u.searchParams.get("n") ?? 4))) checked.push({ title: c.title, answer: await suitAnswer(c.url).catch((e: unknown) => `error: ${e instanceof Error ? e.message : e}`) });
   return NextResponse.json({ found: list.length, checked });
 }
