@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Bidi } from "@/components/Bidi";
 import { Masthead } from "@/components/Masthead";
-import { CategoryChip, Photo, SiteFooter, storyHref, Tracklist } from "@/components/StoryParts";
+import { NewsGrid, Photo, SiteFooter, storyHref } from "@/components/StoryParts";
 import { CATEGORY_META, ku, paragraphs, publishedStories, publishedStory, readingMinutes, siteUrl, soraniDate } from "@/lib/site";
 
 export const revalidate = 300;
@@ -38,20 +38,23 @@ export default async function StoryPage({ params }: Params) {
 
   return (
     <>
-      <Masthead note={`${meta.label} · ${ku(readingMinutes(story.body))} خولەک خوێندنەوە`} />
-      <main id="main" className={`article cat-${story.category}`} style={{ ["--cat" as string]: meta.colour }} data-story={story.id} data-category={story.category}>
-        <div className="art-photo">
-          <Photo story={story} priority />
-          <CategoryChip story={story} glass />
-        </div>
+      <Masthead active="news" />
+      <main id="main" className="article" data-story={story.id}>
         <header className="art-head">
-          <h1>
-            <Bidi text={story.headline} />
-          </h1>
-          <p className="byline">
-            {soraniDate(story.published_at ?? story.created_at)} · فۆڕمولا کەی
-          </p>
+          <div className="art-head-in">
+            <h1>
+              <Bidi text={story.headline} />
+            </h1>
+            <p className="meta">
+              <Link href={`/category/${meta.slug}`}>{meta.label}</Link>
+              <span>{soraniDate(story.published_at ?? story.created_at)}</span>
+              <span>{ku(readingMinutes(story.body))} خولەک خوێندنەوە</span>
+            </p>
+          </div>
         </header>
+        <div className="art-photo slot">
+          <Photo story={story} priority credit />
+        </div>
         <div className="art-body">
           {paragraphs(story.body).map((p, i) => (
             <p key={i}>
@@ -59,25 +62,6 @@ export default async function StoryPage({ params }: Params) {
             </p>
           ))}
         </div>
-        {story.kind === "chart" && story.chart_top?.length ? (
-          <section className="art-chart" aria-label="١٠ گۆرانیی سەرەوە">
-            <ol>
-              {story.chart_top.map((m) => (
-                <li key={m.rank}>
-                  <span className="n">{ku(m.rank)}</span>
-                  <span className="t">
-                    <b className="lat" dir="ltr">{m.title}</b>
-                    <span>
-                      <bdi className="lat">{m.artist}</bdi>
-                      {m.artist_ckb ? <> · {m.artist_ckb}</> : null}
-                    </span>
-                  </span>
-                </li>
-              ))}
-            </ol>
-            <a className="art-chart-all" href="#kchart-h">هەموو ١٠٠ گۆرانییەکە ببینە و بیکەرەوە</a>
-          </section>
-        ) : null}
         {story.gallery?.length ? (
           <section className="gallery" aria-label="وێنەکان">
             {story.gallery.map((g) => (
@@ -149,17 +133,14 @@ export default async function StoryPage({ params }: Params) {
                 <Bidi text={next.headline} />
               </b>
             </span>
-            <span className="arr" aria-hidden="true">
-              ←
-            </span>
           </Link>
         ) : null}
         {related.length ? (
           <section className="sec" aria-labelledby="more">
-            <h2 id="more" className="sec-title">
-              زیاتر لە {meta.label}
-            </h2>
-            <Tracklist stories={related} />
+            <div className="sec-in">
+              <h2 id="more">زیاتر لە {meta.label}</h2>
+              <NewsGrid stories={related} />
+            </div>
           </section>
         ) : null}
       </main>

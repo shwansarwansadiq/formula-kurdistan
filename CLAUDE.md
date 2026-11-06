@@ -18,8 +18,8 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
 | --- | --- |
 | 1. Setup | Accounts in progress; logo, templates and glossary awaiting approval |
 | 2. Engine (collector, scorer, writer, glossary) | Adapted for F1, not yet running |
-| 3. Website and /admin | Copied with temporary look; needs the approved design |
-| 4. Standings, calendar, next-session countdown, race result card, race-weekend mode | Not built |
+| 3. Website and /admin | Public site redesigned (starting-grid world, see DESIGN.md); /admin keeps its working look |
+| 4. Standings, calendar, race pages, driver and team profiles, search, next-session countdown | Built on Jolpica data (src/lib/f1data.ts). Confirm Jolpica terms before ads. Race result card and race-weekend mode not built |
 | 5. Social + video | Copied, inactive until META_TOKEN, META_PAGE_ID and the TikTok keys are set |
 
 ## Differences from Kurean

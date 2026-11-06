@@ -45,3 +45,6 @@ next-env.d.ts
 # video renderer
 /video/node_modules
 /video/out
+/public/_dev
+.taste-skill
+.impeccable

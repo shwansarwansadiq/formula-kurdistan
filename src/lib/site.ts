@@ -57,6 +57,22 @@ export async function publishedStories(opts: { limit?: number; category?: Catego
   return (data ?? []) as Story[];
 }
 
+/** Published stories whose headline or text contains the words searched for. */
+export async function searchStories(q: string, limit = 30): Promise<Story[]> {
+  const term = q.replace(/[,()%*_\\"']/g, " ").replace(/\s+/g, " ").trim().slice(0, 80);
+  if (term.length < 2) return [];
+  if (fixturesOn()) return FIXTURES.filter((s) => s.headline.includes(term) || s.body.includes(term));
+  const { data, error } = await db()
+    .from("stories")
+    .select(LIST_FIELDS)
+    .eq("status", "published")
+    .or(`headline.ilike.%${term}%,body.ilike.%${term}%`)
+    .order("published_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as Story[];
+}
+
 export async function publishedStory(id: number): Promise<Story | null> {
   if (!Number.isSafeInteger(id) || id <= 0) return null;
   if (fixturesOn()) return FIXTURES.find((s) => s.id === id) ?? null;
@@ -100,6 +116,12 @@ export function soraniDate(iso: string | Date, withDay = true): string {
   const d = new Date(new Date(iso).getTime() + 3 * 3600_000); // UTC+3, no DST
   const date = `${ku(d.getUTCDate())}ی ${MONTHS[d.getUTCMonth()]}`;
   return withDay ? `${DAYS[d.getUTCDay()]} ${date}` : date;
+}
+
+/** "١٧:٠٠" in Kurdistan time. */
+export function soraniTime(iso: string | Date): string {
+  const d = new Date(new Date(iso).getTime() + 3 * 3600_000);
+  return ku(`${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`);
 }
 
 /** Reading time in minutes at a relaxed phone pace. */

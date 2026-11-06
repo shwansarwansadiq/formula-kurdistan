@@ -1,35 +1,36 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Masthead } from "@/components/Masthead";
-import { SiteFooter, Tracklist } from "@/components/StoryParts";
-import { categoryFromSlug, CATEGORY_META, issueNumber, ku, publishedStories } from "@/lib/site";
+import { CategoryNav, NewsGrid, SiteFooter } from "@/components/StoryParts";
+import { categoryFromSlug, CATEGORY_META, publishedStories } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const key = categoryFromSlug((await params).slug);
-  return key ? { title: `${CATEGORY_META[key].label} · فۆڕمولا کەی` } : {};
+  return key ? { title: `${CATEGORY_META[key].label} · FORMULAK` } : {};
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const key = categoryFromSlug((await params).slug);
   if (!key) notFound();
-  const meta = CATEGORY_META[key];
-  const [stories, issue] = await Promise.all([publishedStories({ category: key, limit: 40 }), issueNumber()]);
+  const stories = await publishedStories({ category: key, limit: 40 });
 
   return (
     <>
-      <Masthead issue={issue} active={key} />
+      <Masthead active="news" />
       <main id="main" data-category={key}>
-        <section className="cat-head field" style={{ background: meta.colour }}>
-          <h1>{meta.label}</h1>
-          <p>{stories.length ? `${ku(stories.length)} هەواڵ` : "هێشتا هەواڵ لەم بەشەدا نییە."}</p>
+        <header className="pagehead">
+          <div className="sec-in">
+            <h1>{CATEGORY_META[key].label}</h1>
+            <CategoryNav active={key} />
+          </div>
+        </header>
+        <section className="sec">
+          <div className="sec-in">
+            {stories.length ? <NewsGrid stories={stories} /> : <p className="gap">هێشتا هەواڵ لەم بەشەدا بڵاو نەکراوەتەوە.</p>}
+          </div>
         </section>
-        {stories.length ? (
-          <section className="sec">
-            <Tracklist stories={stories} />
-          </section>
-        ) : null}
       </main>
       <SiteFooter />
     </>

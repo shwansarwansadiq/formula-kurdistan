@@ -1,94 +1,125 @@
 /* eslint-disable @next/next/no-img-element -- photos come from our storage bucket at their posted size */
 import Link from "next/link";
-import { CATEGORY_META, ku, readingMinutes, type Story } from "@/lib/site";
+import { CATEGORY_KEYS, CATEGORY_META, soraniDate, type CategoryKey, type Story } from "@/lib/site";
 import { Bidi } from "./Bidi";
 import { Clocks } from "./Clocks";
+import { Logo, Mark } from "./Logo";
 
 export const storyHref = (s: Pick<Story, "id">) => `/news/${s.id}`;
 
-/** The source photo with its credit, or a branded card in the category colour when there is none. */
-export function Photo({ story, priority = false, className = "" }: { story: Story; priority?: boolean; className?: string }) {
-  const meta = CATEGORY_META[story.category];
+/** The story's photo, or the K on charcoal when it has none. Photos with credit follow the photo rule. */
+export function Photo({ story, priority = false, credit = false }: { story: Story; priority?: boolean; credit?: boolean }) {
   if (story.image_url) {
     return (
-      <figure className={`photo ${className}`}>
-        <img
-          src={story.image_url}
-          alt=""
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : "auto"}
-          decoding="async"
-        />
-        {story.image_credit ? <figcaption className="glass credit">وێنە: <bdi className="lat">{story.image_credit}</bdi></figcaption> : null}
+      <figure className="photo">
+        <img src={story.image_url} alt="" loading={priority ? "eager" : "lazy"} fetchPriority={priority ? "high" : "auto"} decoding="async" />
+        {credit && story.image_credit ? (
+          <figcaption>
+            وێنە: <bdi className="lat">{story.image_credit}</bdi>
+          </figcaption>
+        ) : null}
       </figure>
     );
   }
   return (
-    <div className={`photo branded ${className}`} style={{ background: meta.colour }} aria-hidden="true">
-      <b>
-        <Bidi text={story.card_headline} />
-      </b>
+    <div className="photo blank" aria-hidden="true">
+      <Mark size={56} ink="#fff" />
     </div>
   );
 }
 
-export function CategoryChip({ story, glass = false }: { story: Pick<Story, "category">; glass?: boolean }) {
-  const meta = CATEGORY_META[story.category];
+function Meta({ story }: { story: Story }) {
   return (
-    <span className={glass ? "chip glass" : "chip"}>
-      <i style={{ background: meta.colour }} />
-      {meta.label}
-    </span>
+    <p className="meta">
+      <span>{CATEGORY_META[story.category].label}</span>
+      <span>{soraniDate(story.published_at ?? story.created_at, false)}</span>
+    </p>
   );
 }
 
-/** The day's stories as an album tracklist: number, title, category, reading time. */
-export function Tracklist({ stories, start = 1 }: { stories: Story[]; start?: number }) {
+/** One story parked in a grid slot. */
+export function StorySlot({ story, lead = false }: { story: Story; lead?: boolean }) {
+  const Heading = lead ? "h1" : "h3";
   return (
-    <ol className="tracks">
-      {stories.map((s, i) => (
-        <li key={s.id}>
-          <Link href={storyHref(s)} className="track">
-            <span className="n">{String(i + start).padStart(2, "0")}</span>
-            <span className="t">
-              <Bidi text={s.headline} />
-              <span className="c">
-                <i style={{ background: CATEGORY_META[s.category].colour }} />
-                {CATEGORY_META[s.category].label}
-              </span>
-            </span>
-            {s.image_url ? (
-              <img className="thumb" src={s.image_url} alt="" loading="lazy" decoding="async" />
-            ) : (
-              <span className="thumb branded" style={{ background: CATEGORY_META[s.category].colour }}>
-              </span>
-            )}
-            <span className="d">{ku(readingMinutes(s.body))} خولەک</span>
-          </Link>
-        </li>
+    <article className={lead ? "slot story lead" : "slot story"}>
+      <Link href={storyHref(story)}>
+        <Photo story={story} priority={lead} credit={lead} />
+        <Heading>
+          <Bidi text={story.headline} />
+        </Heading>
+        {lead && story.key_points[0] ? (
+          <p className="dek">
+            <Bidi text={story.key_points[0]} />
+          </p>
+        ) : null}
+        <Meta story={story} />
+      </Link>
+    </article>
+  );
+}
+
+export function NewsGrid({ stories }: { stories: Story[] }) {
+  return (
+    <div className="grid2">
+      {stories.map((s) => (
+        <StorySlot key={s.id} story={s} />
       ))}
-    </ol>
+    </div>
   );
 }
 
-export async function SiteFooter() {
+export function CategoryNav({ active }: { active?: CategoryKey }) {
   return (
-    <footer className="site-foot">
-      <Clocks />
-      <div className="follow">
-        <p>هەموو ڕۆژێک هەواڵی فۆڕمولا ١ بە کوردی. شوێنمان بکەوە:</p>
-        <div className="handles" dir="ltr">
-          <a href="https://www.instagram.com/formulak.news" className="handle" rel="noopener">Instagram</a>
-          <a href="https://www.tiktok.com/@formulak.news" className="handle" rel="noopener">TikTok</a>
-          <a href="https://www.facebook.com/formulak.news" className="handle" rel="noopener">Facebook</a>
+    <nav className="catnav" aria-label="بەشەکانی هەواڵ">
+      {CATEGORY_KEYS.map((k) => (
+        <Link key={k} href={`/category/${CATEGORY_META[k].slug}`} className={active === k ? "on" : undefined} aria-current={active === k ? "page" : undefined}>
+          {CATEGORY_META[k].label}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
+export function DataGap() {
+  return <p className="gap">داتای پێشبڕکێکان لە ئێستادا ناخوێنرێتەوە. دواتر سەردانمان بکەرەوە.</p>;
+}
+
+export function DataCredit() {
+  return (
+    <p className="datacredit">
+      داتا لە <a href="https://github.com/jolpica/jolpica-f1" rel="noopener" target="_blank" className="lat">Jolpica F1</a>. کاتەکان بە کاتی هەولێرن.
+    </p>
+  );
+}
+
+export function SiteFooter() {
+  return (
+    <footer className="foot">
+      <div className="foot-in">
+        <nav className="foot-nav" aria-label="بەستەرەکان">
+          <Link href="/standings">ڕیزبەندی</Link>
+          <Link href="/calendar">ڕۆژژمێر</Link>
+          <Link href="/drivers">شۆفێران</Link>
+          <Link href="/teams">تیمەکان</Link>
+          <Link href="/search">گەڕان</Link>
+          <Link href="/privacy">تایبەتمەندی</Link>
+          <Link href="/terms">مەرجەکان</Link>
+        </nav>
+        <div className="foot-follow">
+          <Clocks />
+          <div className="handles" dir="ltr">
+            <a href="https://www.instagram.com/formulak.news" rel="noopener">Instagram</a>
+            <a href="https://www.tiktok.com/@formulak.news" rel="noopener">TikTok</a>
+            <a href="https://www.facebook.com/formulak.news" rel="noopener">Facebook</a>
+          </div>
         </div>
-        <span className="handle-name" dir="ltr">@formulak.news</span>
-        <small>هەموو هەواڵێک سەرچاوەکەی لەگەڵدایە و پێش بڵاوکردنەوە دەخوێنرێتەوە. <a href="/privacy">تایبەتمەندی</a> · <a href="/terms">مەرجەکان</a></small>
+        <p className="disclaimer">
+          فۆڕمولا کەی ماڵپەڕێکی سەربەخۆیە و پەیوەندی بە کۆمپانیاکانی فۆڕمولا ١ـەوە نییە. <bdi className="lat">FORMULAK is an independent news site and is not associated with the Formula 1 companies.</bdi>
+        </p>
       </div>
-      <p className="disclaimer" style={{ fontSize: 12, opacity: 0.75, padding: "12px 18px 20px", margin: 0 }}>
-        فۆڕمولا کەی ماڵپەڕێکی سەربەخۆیە و پەیوەندی بە کۆمپانیاکانی فۆڕمولا ١ و FIA ەوە نییە.{" "}
-        <bdi className="lat">FORMULAK is an independent news site and is not associated with the Formula 1 companies or the FIA. F1 and FORMULA 1 are trademarks of Formula One Licensing B.V.</bdi>
-      </p>
+      <div className="foot-mark" dir="ltr" aria-hidden="true">
+        <Logo size={200} />
+      </div>
     </footer>
   );
 }
