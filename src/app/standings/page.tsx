@@ -24,11 +24,11 @@ export default async function StandingsPage() {
         <section className="sec">
           <div className="sec-in two">
             <div id="drivers">
-              <h2>پاڵەوانێتی شۆفێران</h2>
+              <h2>پاڵەوانێتیی شۆفێران</h2>
               {drivers ? <DriverTable rows={drivers.rows} /> : <DataGap />}
             </div>
             <div id="teams">
-              <h2>پاڵەوانێتی تیمەکان</h2>
+              <h2>پاڵەوانێتیی تیمەکان</h2>
               {teams ? <TeamTable rows={teams.rows} /> : <DataGap />}
             </div>
           </div>

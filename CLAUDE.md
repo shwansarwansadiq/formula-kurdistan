@@ -44,6 +44,12 @@ Live: FIA press releases, Formula1.com (no dates in its feed), The Race, Autospo
 Paused until rechecked: Motorsport.com (looked stale), BBC Sport F1 and PlanetF1 (could not be read).
 **Never work around a site's bot blocking.** If a feed blocks automated readers, pause it, ask the publisher, or replace it.
 
+## Kurdish grammar (Shwan, 17 Nov)
+
+Before writing any Kurdish copy (site labels, captions, prompts, admin text) read docs/kurdish-grammar-reference.md, the summary of
+ڕێزمانی ئاخاوتنی کوردی (Kurdish Academy, 1976) and Marf's ڕێزمانی کوردی: ناو. The writer prompt (src/lib/prompts.ts) carries the same rules.
+Izafe is always ‑ی, written ‑یی after ی (ڕیزبەندیی شۆفێران). Extend the reference when more chapters are read.
+
 ## Editorial rules (non-negotiable)
 
 Write a new Sorani article from the facts; never translate sentence by sentence or copy paragraphs; at most one short

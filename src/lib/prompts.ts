@@ -98,6 +98,16 @@ ${glossaryBlock(terms)}
 9. key_points: exactly 3 short points (under 12 words each) for the TikTok details slide.
 10. Captions: Instagram (2-4 sentences, ends with a call to read more via the link in bio), Facebook (2-3 sentences), TikTok (1-2 sentences). Each caption ends with "سەرچاوە: " followed by the source names given, separated by "، ".
 11. hashtags: 4-8, mixing Sorani and English, e.g. #فۆڕمولا_١ #F1.
+
+Grammar and spelling (Shwan's rule: follow the Kurdish Academy grammar, ڕێزمانی ئاخاوتنی کوردی 1976, and Marf, ڕێزمانی کوردی: ناو; summary in docs/kurdish-grammar-reference.md):
+- Kurdish Academy alphabet: ئ before a word-initial vowel (ئەم، ئێوە); ە for the short vowel; وو for long u (بوو، نووسەر، پەرتووک); ێ and ۆ with their marks; ڕ and ڵ for the strong sounds (ڕۆژ، ماڵ، هەڵبژاردن). No Arabic-only letters in Kurdish words (no ة، ث، ذ، ظ، ض).
+- Izafe is always ‑ی, also after a vowel: خولی هەڵبژاردن، تیمی Mercedes، پێشبڕکێی بەرازیل، یاریگای Interlagos، سەرچاوەی هەواڵ. After a word ending in ی it is written ‑یی: ڕیزبەندیی شۆفێران، پاڵەوانێتیی تیمەکان.
+- Definite ‑ەکە / ‑ەکان and indefinite ‑ێک / ‑ان join by the rules: after a consonant unchanged (تیمەکە، تیمێک); after ا، ۆ، ێ the ە drops (یاریگاکە، پێشبڕکێکە، پێشبڕکێکان); after ی the ی doubles (کانییەکە، تایبەتمەندییەکان); after وو keep وو (ئارەزووەکە); after ە the two merge (پلەکە، خولەکە).
+- With an adjective, definiteness goes on the adjective with a linking ‑ە on the noun: ئۆتۆمبێلە نوێیەکە، تیمە بەهێزەکە. Predicates differ: ئۆتۆمبێلەکە خێرایە.
+- Verbs: present دە‑ (دەبێت، دەکات), negative نا‑ (نابێت), past negative نە‑ (نەیبرد), subjunctive بـ‑ (ببات). Vowel-final stems take ‑ات in the 3rd person (دەکات، دەبات، دەخوات). Written 3rd person singular is ‑ێت (دەبێت، دەچێت), not the spoken ‑ێ.
+- Past transitive verbs take the Set 1 clitic as agent (بردی، بردیان، بردمان); past intransitive take Set 2 (ڕۆیشت، ڕۆیشتن). Never mix them.
+- Possessive clitic comes after the definite suffix: ئۆتۆمبێلەکەی، تیمەکەیان.
+- Numbers and dates in Kurdish digits (١٩، ٢٠٢٦) unless they are lap times or results copied from the source.
 12. You may receive several reports of the same news from different sources. Combine their facts into one article. If they disagree, use the more trusted source, or say plainly that reports differ.`;
 }
 

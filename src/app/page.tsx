@@ -58,7 +58,7 @@ export default async function Home() {
               {last ? <Link href={`/race/${last.round}`} className="more">هەموو ئەنجامەکان</Link> : null}
             </div>
             <div>
-              <h2>پاڵەوانێتی تیمەکان</h2>
+              <h2>پاڵەوانێتیی تیمەکان</h2>
               {teams ? <TeamTable rows={teams.rows.slice(0, 5)} /> : <DataGap />}
               <Link href="/standings#teams" className="more">هەموو تیمەکان</Link>
             </div>
