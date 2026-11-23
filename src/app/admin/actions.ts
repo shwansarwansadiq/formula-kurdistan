@@ -11,6 +11,7 @@ import { download, looksLikeAgencyPhoto, store } from "@/lib/photo";
 import { publishSocial } from "@/lib/social";
 import { publishApproved } from "@/lib/publish";
 import { kickVideos } from "@/lib/video";
+import { changedFields, EDIT_FIELDS, learnFromEdits, recordEdits } from "@/lib/lessons";
 import { fromHawlerInput, nextFreeSlot, spreadEvenly } from "@/lib/schedule";
 import { PLATFORMS } from "@/lib/admin-data";
 
@@ -172,8 +173,11 @@ export async function saveStory(form: FormData) {
   if (form.get("remove_photo") === "on")
     Object.assign(update, { image_url: null, image_source: null, image_credit: null, image_license: "removed", photo_checked_at: new Date().toISOString() });
   if (!update.headline || !update.body || !update.card_headline) throw new Error("headline, card headline and body are required");
+  // What Shwan changed is kept, so the writer can learn from it (lessons he approves in /admin/lessons).
+  const { data: before } = await db().from("stories").select(EDIT_FIELDS.join(", ")).eq("id", id).single();
   const { error } = await db().from("stories").update(update).eq("id", id);
   if (error) throw error;
+  if (before) await recordEdits(changedFields(id, before as unknown as Record<string, unknown>, update));
   refreshSite(id);
   revalidatePath("/admin");
   await kickVideos(); // the edit changes what the video shows: make it again now
@@ -421,4 +425,43 @@ export async function removeDriverPhoto(form: FormData) {
   await requireAdmin();
   await db().from("driver_photos").delete().eq("season", String(form.get("season") ?? "")).eq("driver_id", String(form.get("driver") ?? ""));
   revalidatePath("/admin/drivers");
+}
+
+/* ---------- Lessons from Shwan's edits ---------- */
+
+export async function learnNow() {
+  await requireAdmin();
+  await learnFromEdits();
+  revalidatePath("/admin/lessons");
+}
+
+/** Approve a lesson (its text may have been edited). A spelling lesson goes into the glossary. */
+export async function approveLesson(form: FormData) {
+  await requireAdmin();
+  const id = idOf(form);
+  const rule = String(form.get("rule") ?? "").trim();
+  const english = String(form.get("english") ?? "").trim();
+  const sorani = String(form.get("sorani") ?? "").trim();
+  const { data } = await db().from("writer_lessons").select("kind").eq("id", id).single<{ kind: string }>();
+  if (data?.kind === "term" && english && sorani) {
+    const { error } = await db()
+      .from("glossary")
+      .upsert({ english, sorani, note: "from Shwan's edit", updated_at: new Date().toISOString() }, { onConflict: "english" });
+    if (error) throw error;
+  }
+  const update: Record<string, unknown> = { status: "approved", decided_at: new Date().toISOString() };
+  if (rule) update.rule = rule;
+  if (english) update.english = english;
+  if (sorani) update.sorani = sorani;
+  const { error } = await db().from("writer_lessons").update(update).eq("id", id);
+  if (error) throw error;
+  revalidatePath("/admin/lessons");
+  revalidatePath("/admin/glossary");
+}
+
+export async function rejectLesson(form: FormData) {
+  await requireAdmin();
+  const { error } = await db().from("writer_lessons").update({ status: "rejected", decided_at: new Date().toISOString() }).eq("id", idOf(form));
+  if (error) throw error;
+  revalidatePath("/admin/lessons");
 }

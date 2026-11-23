@@ -16,6 +16,7 @@ const TABS = [
   { href: "/admin/stickers", key: "stickers", label: "ستیکەر" },
   { href: "/admin/sources", key: "sources", label: "سەرچاوەکان" },
   { href: "/admin/glossary", key: "glossary", label: "فەرهەنگ" },
+  { href: "/admin/lessons", key: "lessons", label: "وانەکان" },
 ] as const;
 
 export async function AdminShell({ active, title, children }: { active: (typeof TABS)[number]["key"]; title: string; children: React.ReactNode }) {

@@ -53,3 +53,13 @@ describe("dropStrayLatin", () => {
     expect(dropStrayLatin("بزوێنەری V8ـی ٢.١ لیتری و FIA")).toBe("بزوێنەری V8ـی ٢.١ لیتری و FIA");
   });
 });
+
+import { changedFields } from "./lessons";
+
+describe("changedFields", () => {
+  it("keeps only the fields Shwan changed", () => {
+    const old = { headline: "ڤۆڵف ڕوونی دەکاتەوە", body: "دەق", key_points: ["a", "b", "c"], caption_tiktok: "x" };
+    const next = { headline: "وۆڵف ڕوونی دەکاتەوە", body: "دەق", key_points: ["a", "b", "c"], caption_tiktok: "x" };
+    expect(changedFields(7, old, next)).toEqual([{ story_id: 7, field: "headline", before: "ڤۆڵف ڕوونی دەکاتەوە", after: "وۆڵف ڕوونی دەکاتەوە" }]);
+  });
+});

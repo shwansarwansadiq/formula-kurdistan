@@ -51,6 +51,12 @@ Before writing any Kurdish copy (site labels, captions, prompts, admin text) rea
 ڕێزمانی ئاخاوتنی کوردی (Kurdish Academy, 1976) and Marf's ڕێزمانی کوردی: ناو. The writer prompt (src/lib/prompts.ts) carries the same rules.
 Izafe is always ‑ی, written ‑یی after ی (ڕیزبەندیی شۆفێران). Extend the reference when more chapters are read.
 
+## Learning from Shwan's edits (23 Nov)
+
+Every saved story edit is kept in `story_edits` (src/lib/lessons.ts). The hourly write job turns new edits into short
+lessons (`writer_lessons`, migrate-019); a lesson reaches the writer prompt only after Shwan approves it in /admin/lessons.
+An approved spelling lesson goes into the glossary.
+
 ## Editorial rules (non-negotiable)
 
 Write a new Sorani article from the facts; never translate sentence by sentence or copy paragraphs; at most one short

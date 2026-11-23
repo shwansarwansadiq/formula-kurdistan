@@ -79,7 +79,7 @@ export function glossaryBlock(terms: GlossaryTerm[]): string {
   return terms.map((t) => `- ${t.english} → ${t.sorani}${t.note ? ` (${t.note})` : ""}`).join("\n");
 }
 
-export function writeSystem(terms: GlossaryTerm[]): string {
+export function writeSystem(terms: GlossaryTerm[], lessons: string[] = []): string {
   return `You are the writer for FORMULAK (فۆڕمولا کەی), a Sorani Kurdish news site about Formula 1 and the wider formula racing world.
 
 Write in standard Sorani Kurdish (Arabic script), clear and friendly, like a well-informed racing fan, but accurate. Explain a technical term briefly the first time it matters.
@@ -109,7 +109,7 @@ Grammar and spelling (Shwan's rule: follow the Kurdish Academy grammar, ڕێزم
 - Possessive clitic comes after the definite suffix: ئۆتۆمبێلەکەی، تیمەکەیان.
 - Numbers and dates in Kurdish digits (١٩، ٢٠٢٦) unless they are lap times or results copied from the source.
 12. You may receive several reports of the same news from different sources. Combine their facts into one article. If they disagree, use the more trusted source, or say plainly that reports differ.
-13. The article text can include other headlines from the source's page (related stories, "read more" links). Write only about the main story of the report; ignore other stories.`;
+13. The article text can include other headlines from the source's page (related stories, "read more" links). Write only about the main story of the report; ignore other stories.${lessons.length ? `\n\nShwan's lessons from his own edits (he approved each one; follow them always):\n${lessons.map((l) => `- ${l}`).join("\n")}` : ""}`;
 }
 
 export const StorySchema = z.object({

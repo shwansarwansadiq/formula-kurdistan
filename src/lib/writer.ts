@@ -3,6 +3,7 @@ import { db, type GlossaryTerm, type Source } from "./db";
 import { hawlerMidnight } from "./schedule";
 import { attachPhoto, sourcePhotoCandidates, type PhotoCandidate } from "./photo";
 import { withArticleText } from "./article";
+import { approvedLessons } from "./lessons";
 import { needsSecondSource, primaryReport, relatedCandidates, totalSourceChars, type Report } from "./cluster";
 import {
   CATEGORIES,
@@ -239,7 +240,7 @@ export async function writeBest(): Promise<{ written: number; failed: number }> 
 
       const story = await callTool({
         model: WRITE_MODEL,
-        system: writeSystem(terms),
+        system: writeSystem(terms, await approvedLessons()),
         user: writeUserMessage({ category, sensitive, reports: ordered }),
         tool: STORY_TOOL,
         maxTokens: 8000,
@@ -316,7 +317,7 @@ export async function regenerate(storyId: number): Promise<void> {
 
   const written = await callTool({
     model: WRITE_MODEL,
-    system: writeSystem(await glossary()),
+    system: writeSystem(await glossary(), await approvedLessons()),
     user: writeUserMessage({ category: story.category, sensitive, reports: ordered }),
     tool: STORY_TOOL,
     maxTokens: 8000,
