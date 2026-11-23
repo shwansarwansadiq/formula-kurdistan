@@ -177,6 +177,7 @@ export async function saveStory(form: FormData) {
   refreshSite(id);
   revalidatePath("/admin");
   await kickVideos(); // the edit changes what the video shows: make it again now
+  if (form.get("back") === "queue") return; // edited inside the waiting list: stay there
   redirect(`/admin/story/${id}?saved=1`);
 }
 

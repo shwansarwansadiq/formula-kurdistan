@@ -9,13 +9,13 @@ import { Submit } from "./Submit";
  * Everything about a story's photos in one place: the main photo, your own upload, the free-photo search,
  * the other photos found in the source articles, and the extra photos shown inside the article.
  */
-export function PhotoPanel({ story }: { story: AdminStory }) {
+export function PhotoPanel({ story, inCard = false }: { story: AdminStory; inCard?: boolean }) {
   const status = photoStatus(story);
   const inGallery = new Set(story.gallery.map((g) => g.url));
   const options = story.photo_options.filter((o) => o.url !== story.image_source);
   return (
-    <section className="photos" aria-labelledby="ph">
-      <h2 id="ph" className="adm-h2">وێنەکان</h2>
+    <section className={inCard ? "photos in-card" : "photos"} aria-label="وێنەکان">
+      {inCard ? null : <h2 className="adm-h2">وێنەکان</h2>}
 
       <div className="ph-main">
         {story.image_url ? <img src={story.image_url} alt="" /> : <div className="ph-empty">بێ وێنە: کارتی براند</div>}
