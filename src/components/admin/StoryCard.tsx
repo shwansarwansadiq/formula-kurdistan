@@ -55,7 +55,7 @@ export function StoryCard({ story, nextSlot }: { story: AdminStory; nextSlot: Da
           ))}
         </ul>
 
-        <details className="card-full" open>
+        <details className="card-full">
           <summary>دەقی تەواو، وەک لە ماڵپەڕ دەردەکەوێت</summary>
           <div className="card-body">
             {paragraphs(story.body).map((p, i) => (
