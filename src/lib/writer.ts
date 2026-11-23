@@ -15,6 +15,7 @@ import {
   ScoreSchema,
   STORY_TOOL,
   StorySchema,
+  cleanStory,
   scoreUserMessage,
   writeSystem,
   writeUserMessage,
@@ -242,7 +243,7 @@ export async function writeBest(): Promise<{ written: number; failed: number }> 
         user: writeUserMessage({ category, sensitive, reports: ordered }),
         tool: STORY_TOOL,
         maxTokens: 8000,
-        parse: (x) => StorySchema.parse(x),
+        parse: (x) => cleanStory(StorySchema.parse(x)),
       });
 
       const { data: inserted, error: insertError } = await db().from("stories").insert({
@@ -319,7 +320,7 @@ export async function regenerate(storyId: number): Promise<void> {
     user: writeUserMessage({ category: story.category, sensitive, reports: ordered }),
     tool: STORY_TOOL,
     maxTokens: 8000,
-    parse: (x) => StorySchema.parse(x),
+    parse: (x) => cleanStory(StorySchema.parse(x)),
   });
   const { error: updateError } = await db()
     .from("stories")

@@ -87,7 +87,7 @@ Write in standard Sorani Kurdish (Arabic script), clear and friendly, like a wel
 Hard rules:
 1. Write a NEW article from the facts. Never translate the source sentence by sentence and never copy its paragraphs. At most one short quote, attributed.
 2. Use only facts present in the source text given to you. Do not add numbers, dates, names or claims that are not there. If something is unclear, leave it out.
-3. Names (Shwan's rule, 23 Nov): write every person, team, car maker, circuit, race and place name in Sorani letters only, everywhere: headline, card_headline, body, key_points and captions. Never write the English/Latin form of a name, not even in brackets. Use the glossary spelling when the name is in it (e.g. ماکس ڤێرستاپن، تۆتۆ وۆڵف، مەکلارن); otherwise spell it in Sorani by how it is pronounced, and spell it the same way throughout the story. Latin letters are allowed only for the source names in the captions' credit line, technical abbreviations such as FIA, DRS and V8, and lap times or results copied from the source.
+3. Names (Shwan's rule, 23 Nov): write every person, team, car maker, circuit, race and place name in Sorani letters only, everywhere: headline, card_headline, body, key_points and captions. Never write the English/Latin form of a name, not even in brackets. Use the glossary spelling when the name is in it (e.g. ماکس ڤێرستاپن، تۆتۆ وۆڵف، مەکلارن); otherwise spell it in Sorani by how it is pronounced, and spell it the same way throughout the story. Latin letters are allowed only for news-source names (RaceFans, Autosport) when crediting them, technical abbreviations such as FIA, DRS and V8, and lap times or results copied from the source.
 4. Always use these glossary spellings:
 ${glossaryBlock(terms)}
 5. Rumours are never presented as facts. A transfer is "reported" until the team or driver confirms it. For crash injuries, health, death, legal or scandal topics, state only what is confirmed and say who confirmed it. Copy results, positions, points and times exactly from the source; never work them out yourself.
@@ -108,7 +108,8 @@ Grammar and spelling (Shwan's rule: follow the Kurdish Academy grammar, ڕێزم
 - Past transitive verbs take the Set 1 clitic as agent (بردی، بردیان، بردمان); past intransitive take Set 2 (ڕۆیشت، ڕۆیشتن). Never mix them.
 - Possessive clitic comes after the definite suffix: ئۆتۆمبێلەکەی، تیمەکەیان.
 - Numbers and dates in Kurdish digits (١٩، ٢٠٢٦) unless they are lap times or results copied from the source.
-12. You may receive several reports of the same news from different sources. Combine their facts into one article. If they disagree, use the more trusted source, or say plainly that reports differ.`;
+12. You may receive several reports of the same news from different sources. Combine their facts into one article. If they disagree, use the more trusted source, or say plainly that reports differ.
+13. The article text can include other headlines from the source's page (related stories, "read more" links). Write only about the main story of the report; ignore other stories.`;
 }
 
 export const StorySchema = z.object({
@@ -122,6 +123,22 @@ export const StorySchema = z.object({
   hashtags: z.array(z.string().regex(/^#\S+$/)).min(3).max(10),
 });
 export type StoryOutput = z.infer<typeof StorySchema>;
+
+/** A stray Latin letter glued to a Sorani word (a model slip such as «lتێکەڵ») is removed. */
+export const dropStrayLatin = (s: string) => s.replace(/(?<![A-Za-z0-9])[A-Za-z](?=[\u0600-\u06FF])/g, "");
+
+export function cleanStory(st: StoryOutput): StoryOutput {
+  return {
+    ...st,
+    headline: dropStrayLatin(st.headline),
+    card_headline: dropStrayLatin(st.card_headline),
+    body: dropStrayLatin(st.body),
+    key_points: st.key_points.map(dropStrayLatin),
+    caption_instagram: dropStrayLatin(st.caption_instagram),
+    caption_facebook: dropStrayLatin(st.caption_facebook),
+    caption_tiktok: dropStrayLatin(st.caption_tiktok),
+  };
+}
 
 export const STORY_TOOL = {
   name: "save_story",

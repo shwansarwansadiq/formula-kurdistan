@@ -44,3 +44,12 @@ describe("glossaryNamesIn", () => {
     expect(glossaryNamesIn("تۆتۆ وۆڵف ڕوونی دەکاتەوە چۆن مێرسێدس بردنەوەی لەدەستدا", terms)).toEqual(["Toto Wolff", "Mercedes"]);
   });
 });
+
+import { dropStrayLatin } from "./prompts";
+
+describe("dropStrayLatin", () => {
+  it("removes a lone Latin letter glued to a Sorani word and keeps real abbreviations", () => {
+    expect(dropStrayLatin("بەهۆی lتێکەڵبوونەکەی")).toBe("بەهۆی تێکەڵبوونەکەی");
+    expect(dropStrayLatin("بزوێنەری V8ـی ٢.١ لیتری و FIA")).toBe("بزوێنەری V8ـی ٢.١ لیتری و FIA");
+  });
+});
