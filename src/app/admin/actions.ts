@@ -201,8 +201,21 @@ export async function saveTerm(form: FormData) {
   const english = String(form.get("english") ?? "").trim();
   const sorani = String(form.get("sorani") ?? "").trim();
   const note = String(form.get("note") ?? "").trim() || null;
+  const original = String(form.get("original") ?? "").trim();
   if (!english || !sorani) return;
-  await db().from("glossary").upsert({ english, sorani, note, updated_at: new Date().toISOString() }, { onConflict: "english" });
+  const { error } = await db().from("glossary").upsert({ english, sorani, note, updated_at: new Date().toISOString() }, { onConflict: "english" });
+  if (error) throw error;
+  // The English word itself was changed: the old row goes, so the writer doesn't get both.
+  if (original && original !== english) await db().from("glossary").delete().eq("english", original);
+  revalidatePath("/admin/glossary");
+}
+
+export async function deleteTerm(form: FormData) {
+  await requireAdmin();
+  const english = String(form.get("original") ?? "").trim(); // the saved word, even if the field was being edited
+  if (!english) return;
+  const { error } = await db().from("glossary").delete().eq("english", english);
+  if (error) throw error;
   revalidatePath("/admin/glossary");
 }
 

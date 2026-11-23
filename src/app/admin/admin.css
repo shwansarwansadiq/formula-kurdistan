@@ -101,6 +101,13 @@
 .term-form input[dir="ltr"], .login-form input { font-family: var(--latin); }
 .terms { width: 100%; border-collapse: collapse; background: var(--paper); border-radius: 18px; overflow: hidden; font-size: 14px; }
 .terms td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+.term-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.term-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 10px; }
+.term-row input { font: inherit; font-size: 14px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 10px; background: #fff; min-width: 0; }
+.term-row input[dir="ltr"] { font-family: var(--latin); font-weight: 700; }
+.term-row input[name="note"] { color: var(--ink-2); font-size: 13px; }
+.term-acts { display: flex; gap: 6px; justify-content: flex-end; }
+@media (min-width: 760px) { .term-row { grid-template-columns: 1fr 1fr 1.3fr auto; align-items: center; } }
 .muted-cell { color: var(--ink-2); font-size: 12.5px; }
 
 .back { display: inline-block; font-size: 13px; color: var(--ink-2); margin-bottom: 10px; }
