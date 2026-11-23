@@ -92,6 +92,24 @@ export function articleImages(html: string, pageUrl: string, limit = 12): string
   return out;
 }
 
+/**
+ * English names for the free-photo search. Stories are written with Sorani names only (Shwan, 23 Nov), so names are
+ * found through the glossary's name entries ("name: …" notes), plus any Latin words still in the headline.
+ */
+export function glossaryNamesIn(text: string, terms: { english: string; sorani: string }[]): string[] {
+  return terms
+    .map((t) => ({ english: t.english, at: t.sorani ? text.indexOf(t.sorani) : -1 }))
+    .filter((t) => t.at >= 0)
+    .sort((a, b) => a.at - b.at)
+    .map((t) => t.english);
+}
+
+async function photoSubjectsFor(headline: string): Promise<string[]> {
+  const { data } = await db().from("glossary").select("english, sorani").like("note", "name:%");
+  const named = glossaryNamesIn(headline, (data ?? []) as { english: string; sorani: string }[]);
+  return photoSubjects([...named, ...bidiRuns(headline).filter((r) => r.latin).map((r) => r.text)]);
+}
+
 /** Below this long side a photo looks blurry on a phone; the branded card is used instead. */
 export const MIN_SOURCE_LONG = 800;
 
@@ -153,7 +171,7 @@ export async function attachPhoto(storyId: number, headline: string, reports: Ph
   const found = await sourcePhotoCandidates(reports);
   const options = [...found.main, ...found.extra].map((c) => ({ url: c.image, page: c.page, credit: c.credit }));
   await db().from("stories").update({ photo_options: options }).eq("id", storyId);
-  const subjects = photoSubjects(bidiRuns(headline).filter((r) => r.latin).map((r) => r.text));
+  const subjects = await photoSubjectsFor(headline);
   const free = subjects.length ? await findFreePhoto(subjects) : null;
   if (free) {
     const d = await download(free.image);

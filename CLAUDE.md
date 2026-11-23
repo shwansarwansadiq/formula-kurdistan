@@ -55,8 +55,8 @@ Izafe is always ‑ی, written ‑یی after ی (ڕیزبەندیی شۆفێرا
 
 Write a new Sorani article from the facts; never translate sentence by sentence or copy paragraphs; at most one short
 attributed quote; invent nothing; credit every source with a link; no rumours as facts; sensitive stories state only what
-is confirmed and who confirmed it; glossary spellings are mandatory; names stay in Latin letters with Sorani in brackets
-the first time; takedown requests are honoured immediately.
+is confirmed and who confirmed it; glossary spellings are mandatory; names (people, teams, circuits, places) are written in Sorani only, never in
+Latin letters, not even in brackets (Shwan, 23 Nov; the free-photo search maps them back through the glossary's "name:" entries); takedown requests are honoured immediately.
 
 ## Working conventions
 

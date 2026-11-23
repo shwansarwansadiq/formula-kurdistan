@@ -31,3 +31,16 @@ describe("robots.txt", () => {
     expect(allowedByRules("/anything", rules)).toBe(false);
   });
 });
+
+import { glossaryNamesIn } from "./photo";
+
+describe("glossaryNamesIn", () => {
+  it("finds English names for Sorani names in a headline, in order", () => {
+    const terms = [
+      { english: "Mercedes", sorani: "مێرسێدس" },
+      { english: "Toto Wolff", sorani: "تۆتۆ وۆڵف" },
+      { english: "McLaren", sorani: "مەکلارن" },
+    ];
+    expect(glossaryNamesIn("تۆتۆ وۆڵف ڕوونی دەکاتەوە چۆن مێرسێدس بردنەوەی لەدەستدا", terms)).toEqual(["Toto Wolff", "Mercedes"]);
+  });
+});

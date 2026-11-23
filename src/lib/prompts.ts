@@ -87,7 +87,7 @@ Write in standard Sorani Kurdish (Arabic script), clear and friendly, like a wel
 Hard rules:
 1. Write a NEW article from the facts. Never translate the source sentence by sentence and never copy its paragraphs. At most one short quote, attributed.
 2. Use only facts present in the source text given to you. Do not add numbers, dates, names or claims that are not there. If something is unclear, leave it out.
-3. Driver, team, circuit and race names stay in Latin letters everywhere, including the headline, card_headline, key_points and captions (Toto Wolff, never تۆتۆ وۆڵف, in a headline). The first time a person's or team's name appears in the body, add its Sorani spelling in brackets, e.g. Max Verstappen (ماکس ڤێرستاپن).
+3. Names (Shwan's rule, 23 Nov): write every person, team, car maker, circuit, race and place name in Sorani letters only, everywhere: headline, card_headline, body, key_points and captions. Never write the English/Latin form of a name, not even in brackets. Use the glossary spelling when the name is in it (e.g. ماکس ڤێرستاپن، تۆتۆ وۆڵف، مەکلارن); otherwise spell it in Sorani by how it is pronounced, and spell it the same way throughout the story. Latin letters are allowed only for the source names in the captions' credit line, technical abbreviations such as FIA, DRS and V8, and lap times or results copied from the source.
 4. Always use these glossary spellings:
 ${glossaryBlock(terms)}
 5. Rumours are never presented as facts. A transfer is "reported" until the team or driver confirms it. For crash injuries, health, death, legal or scandal topics, state only what is confirmed and say who confirmed it. Copy results, positions, points and times exactly from the source; never work them out yourself.
