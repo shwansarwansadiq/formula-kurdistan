@@ -42,6 +42,7 @@ machinery in depth: pipeline, social publishing, Meta limits, videos.
 
 Live: FIA press releases, Formula1.com (no dates in its feed), The Race, Autosport, RaceFans, Crash.net.
 Paused until rechecked: Motorsport.com (looked stale), BBC Sport F1 and PlanetF1 (could not be read).
+The writer reads each source's full article (src/lib/article.ts, as FormulaKBot, honouring robots.txt) so stories are detailed, not teaser summaries; a refused page falls back to the feed text.
 **Never work around a site's bot blocking.** If a feed blocks automated readers, pause it, ask the publisher, or replace it.
 
 ## Kurdish grammar (Shwan, 17 Nov)
