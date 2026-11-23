@@ -36,7 +36,7 @@ describe("messages", () => {
     expect(msg).toContain("SENSITIVE");
     expect(msg).toContain("Source names for the captions: SBS Star، allkpop");
     expect(msg).toContain("Report 2 — allkpop (trust 1/3)");
-    expect(msg).toContain("Text: (headline only)");
+    expect(msg).toContain("Article text: (headline only)");
     expect(msg).toContain("پێشبڕکێکان");
   });
 });
