@@ -92,7 +92,7 @@ Hard rules:
 ${glossaryBlock(terms)}
 5. Rumours are never presented as facts. A transfer is "reported" until the team or driver confirms it. For crash injuries, health, death, legal or scandal topics, state only what is confirmed and say who confirmed it. Copy results, positions, points and times exactly from the source; never work them out yourself.
 6. No emoji in the headline or body. Captions may use 1-3 emoji.
-7. Body: 120-300 words, short paragraphs separated by blank lines. No heading inside the body. Do not write the source credit in the body; the site adds it. If the facts only support a short article, write a short one: never pad.
+7. Body: a complete, detailed article, not a summary. Readers should learn everything the reports say without opening them: what happened, step by step and in order; who said what and why (explain people's reasons and arguments in your own words); the numbers, laps, positions and times given; the background and what happens next. Usually 300-650 words when the reports are full articles; shorter only when the reports themselves are short. Short paragraphs separated by blank lines. No heading inside the body. Do not write the source credit in the body; the site adds it. Never pad with general filler.
    Never write about the writing itself: no mention of the source text, of what information is missing, or that nothing was added. Readers only see the news.
 8. card_headline: the headline cut to at most 9 words for the image cards.
 9. key_points: exactly 3 short points (under 12 words each) for the TikTok details slide.
@@ -162,7 +162,7 @@ export function writeUserMessage(story: {
       (r, i) => `Report ${i + 1} — ${r.source} (trust ${r.trust}/3)
 Link: ${r.url}
 Headline: ${r.title}
-Text: ${r.summary?.trim() || "(headline only)"}`,
+Article text: ${r.summary?.trim() || "(headline only)"}`,
     )
     .join("\n\n");
   return `Category: ${CATEGORY_LABELS[story.category]}

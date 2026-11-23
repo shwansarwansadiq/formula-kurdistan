@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { db, type GlossaryTerm, type Source } from "./db";
 import { hawlerMidnight } from "./schedule";
 import { attachPhoto, sourcePhotoCandidates, type PhotoCandidate } from "./photo";
+import { withArticleText } from "./article";
 import { needsSecondSource, primaryReport, relatedCandidates, totalSourceChars, type Report } from "./cluster";
 import {
   CATEGORIES,
@@ -225,7 +226,8 @@ export async function writeBest(): Promise<{ written: number; failed: number }> 
         continue;
       }
 
-      const reports = [toReport(item), ...same.map(toReport)];
+      // The whole article from each source, not just the feed's teaser, so the story can go into detail.
+      const reports = await withArticleText([toReport(item), ...same.map(toReport)]);
       if (totalSourceChars(reports) < MIN_SOURCE_CHARS) {
         await db().from("raw_items").update({ status: "skipped", score_reason: `${item.score_reason} · no source text` }).eq("id", item.id);
         continue;
@@ -307,7 +309,7 @@ export async function regenerate(storyId: number): Promise<void> {
   if (!rows.length) throw new Error("the source reports for this story are gone");
   const main = rows.find((r) => r.id === story.raw_item_id) ?? rows[0];
   const sensitive = main.score_reason ? parseScoreReason(main.score_reason).sensitive : false;
-  const reports = rows.map(toReport);
+  const reports = await withArticleText(rows.map(toReport));
   const primary = primaryReport(reports);
   const ordered = [primary, ...reports.filter((r) => r !== primary)];
 
